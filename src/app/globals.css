@@ -1,5 +1,5 @@
-/* @import "tailwindcss"; */
+@import "tailwindcss";
 
-@import "tailwindcss/preflight"; /* Only resets & base styles */
-@import "tailwindcss/components"; /* Only reusable component styles */
-@import "tailwindcss/utilities"; /* Only utility classes */
+body {
+  @apply bg-gray-100 text-gray-900;
+}
