@@ -5,31 +5,96 @@ import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
+  ChartOptions,
+  TooltipItem,
+  Scale,
+  CoreScaleOptions,
 } from "chart.js";
-import { Bar } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend
 );
 
-const options = {
+const options: ChartOptions<"line"> = {
   responsive: true,
   plugins: {
     legend: {
-      position: "top" as const,
+      display: false,
     },
     title: {
       display: true,
-      text: "GitHub Contributions",
+      text: "CREATIVE FLOW",
+      font: {
+        family: "'Arial Black', sans-serif",
+        size: 24,
+        weight: "bold" as const,
+      },
+      color: "#000000",
+      padding: 20,
+    },
+    tooltip: {
+      backgroundColor: "rgba(0, 0, 0, 0.9)",
+      titleFont: {
+        family: "Arial",
+        size: 14,
+        weight: "bold",
+      },
+      bodyFont: {
+        family: "Arial",
+        size: 12,
+      },
+      callbacks: {
+        label: function (context: TooltipItem<"line">) {
+          return `${context.parsed.y} contributions`;
+        },
+      },
+    },
+  },
+  scales: {
+    x: {
+      grid: {
+        display: false,
+      },
+      ticks: {
+        font: {
+          family: "Arial",
+          size: 12,
+          weight: "bold",
+        },
+        color: "#000000",
+      },
+    },
+    y: {
+      grid: {
+        color: "rgba(0, 0, 0, 0.1)",
+        display: true,
+      },
+      ticks: {
+        font: {
+          family: "Arial",
+          size: 12,
+          weight: "bold",
+        },
+        color: "#000000",
+        callback: function (
+          this: Scale<CoreScaleOptions>,
+          tickValue: number | string
+        ) {
+          return tickValue;
+        },
+      },
     },
   },
 };
@@ -52,7 +117,6 @@ export default function GitHubContributions() {
     };
 
     fetchContributions();
-    // Refresh data every 5 minutes
     const interval = setInterval(fetchContributions, 5 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
@@ -63,14 +127,29 @@ export default function GitHubContributions() {
       {
         label: "Contributions",
         data: contributionData.contributions,
-        backgroundColor: "rgba(75, 192, 192, 0.5)",
+        borderColor: "#000000",
+        backgroundColor: "rgba(0, 0, 0, 0.1)",
+        borderWidth: 3,
+        tension: 0.4,
+        fill: true,
+        pointRadius: 0,
+        pointHoverRadius: 6,
+        pointHoverBackgroundColor: "#000000",
+        pointHoverBorderColor: "#FFFFFF",
+        pointHoverBorderWidth: 2,
       },
     ],
   };
 
   return (
-    <div className="w-full p-4 bg-white rounded-lg shadow-md">
-      <Bar options={options} data={data} />
+    <div className="w-full p-8 bg-gradient-to-r from-gray-50 to-white rounded-lg shadow-lg border border-gray-100">
+      <div className="mb-4 text-center text-sm text-gray-600 uppercase tracking-widest">
+        &ldquo;Crafting Digital Experiences&rdquo;
+      </div>
+      <Line options={options} data={data} />
+      <div className="mt-4 text-right text-xs text-gray-500 uppercase tracking-wider">
+        Contribution Flow
+      </div>
     </div>
   );
 }
