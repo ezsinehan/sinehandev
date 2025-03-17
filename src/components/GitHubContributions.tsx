@@ -12,8 +12,6 @@ import {
   Legend,
   ChartOptions,
   TooltipItem,
-  Scale,
-  CoreScaleOptions,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 
@@ -29,31 +27,31 @@ ChartJS.register(
 
 const options: ChartOptions<"line"> = {
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: {
       display: false,
     },
     title: {
       display: true,
-      text: "CREATIVE FLOW",
+      text: "GitHub Contributions",
       font: {
-        family: "'Arial Black', sans-serif",
-        size: 24,
-        weight: "bold" as const,
-      },
-      color: "#000000",
-      padding: 20,
-    },
-    tooltip: {
-      backgroundColor: "rgba(0, 0, 0, 0.9)",
-      titleFont: {
-        family: "Arial",
-        size: 14,
+        size: 16,
         weight: "bold",
       },
-      bodyFont: {
-        family: "Arial",
+      color: "#374151",
+      padding: {
+        top: 10,
+        bottom: 10,
+      },
+    },
+    tooltip: {
+      backgroundColor: "rgba(0, 0, 0, 0.8)",
+      titleFont: {
         size: 12,
+      },
+      bodyFont: {
+        size: 11,
       },
       callbacks: {
         label: function (context: TooltipItem<"line">) {
@@ -69,31 +67,25 @@ const options: ChartOptions<"line"> = {
       },
       ticks: {
         font: {
-          family: "Arial",
-          size: 12,
-          weight: "bold",
+          size: 11,
         },
-        color: "#000000",
+        color: "#6B7280",
+        maxRotation: 0,
+        autoSkip: true,
+        maxTicksLimit: 8,
       },
     },
     y: {
       grid: {
-        color: "rgba(0, 0, 0, 0.1)",
+        color: "rgba(107, 114, 128, 0.1)",
         display: true,
       },
       ticks: {
         font: {
-          family: "Arial",
-          size: 12,
-          weight: "bold",
+          size: 11,
         },
-        color: "#000000",
-        callback: function (
-          this: Scale<CoreScaleOptions>,
-          tickValue: number | string
-        ) {
-          return tickValue;
-        },
+        color: "#6B7280",
+        maxTicksLimit: 5,
       },
     },
   },
@@ -127,14 +119,14 @@ export default function GitHubContributions() {
       {
         label: "Contributions",
         data: contributionData.contributions,
-        borderColor: "#000000",
-        backgroundColor: "rgba(0, 0, 0, 0.1)",
-        borderWidth: 3,
+        borderColor: "#4B5563",
+        backgroundColor: "rgba(75, 85, 99, 0.1)",
+        borderWidth: 2,
         tension: 0.4,
         fill: true,
         pointRadius: 0,
-        pointHoverRadius: 6,
-        pointHoverBackgroundColor: "#000000",
+        pointHoverRadius: 4,
+        pointHoverBackgroundColor: "#4B5563",
         pointHoverBorderColor: "#FFFFFF",
         pointHoverBorderWidth: 2,
       },
@@ -142,13 +134,9 @@ export default function GitHubContributions() {
   };
 
   return (
-    <div className="w-full p-8 bg-gradient-to-r from-gray-50 to-white rounded-lg shadow-lg border border-gray-100">
-      <div className="mb-4 text-center text-sm text-gray-600 uppercase tracking-widest">
-        &ldquo;Crafting Digital Experiences&rdquo;
-      </div>
-      <Line options={options} data={data} />
-      <div className="mt-4 text-right text-xs text-gray-500 uppercase tracking-wider">
-        Contribution Flow
+    <div className="w-full p-4 bg-white rounded-lg shadow-sm">
+      <div className="h-[300px]">
+        <Line options={options} data={data} />
       </div>
     </div>
   );

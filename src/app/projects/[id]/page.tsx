@@ -112,15 +112,6 @@ export default async function ProjectDetailPage({ params }: Props) {
         )}
       </div>
 
-      {/* Debug information */}
-      {/* <div className="mt-8 p-4 bg-gray-100 rounded-md">
-        <h3 className="text-lg font-semibold mb-2">Debug Info:</h3>
-        <p>GitHub URL: {project.githubUrl || "Not provided"}</p>
-        <p>Demo URL: {project.demoUrl || "Not provided"}</p>
-        <p>Has valid GitHub URL: {hasGithubUrl ? "Yes" : "No"}</p>
-        <p>Has valid Demo URL: {hasDemoUrl ? "Yes" : "No"}</p>
-      </div> */}
-
       <p className="text-sm text-gray-500 mt-4">
         Created at: {new Date(project.createdAt).toLocaleDateString()}
       </p>
