@@ -1,0 +1,21 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id String @id @default(cuid())
+  title String
+  description String
+  imageUrl String @default("/images/default.jpg")
+  githubUrl String @default("sinehan.dev")
+  demoUrl String @default("sinehan.dev")
+  createdAt DateTime @default(now())
+}
