@@ -57,10 +57,14 @@ const Work = () => {
         </Link>
         <Link
           className="p-4 rounded-md border border-solid border-gray-400"
-          href={""}
+          href={"https://github.com/ezsinehan/kinova-arm-challenge/tree/ezlearnsarm"}
         >
-          <h3 className="text-lg font-semibold text-white mb-2">In Progress</h3>
-          <p className="text-sm text-gray-400">Coming Soon...</p>
+          <h3 className="text-lg font-semibold text-white mb-2">
+            Robotic Arm System Leaf Detection & Grasping
+          </h3>
+          <p className="text-sm text-gray-400">
+            Developed a prototype using ROS2 and Kinova Gen3 to detect and approach leaves using depth sensors for agricultural manipulation tasks.  
+          </p>
         </Link>
         {/* <Link
           className="p-4 rounded-md border border-solid border-gray-400"
