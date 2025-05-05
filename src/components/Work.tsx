@@ -57,7 +57,7 @@ const Work = () => {
         </Link>
         <Link
           className="p-4 rounded-md border border-solid border-gray-400"
-          href={"https://github.com/ezsinehan/kinova-arm-challenge/tree/ezlearnsarm"}
+          href={"https://github.com/ezsinehan/kinova-leaf-grasping"}
         >
           <h3 className="text-lg font-semibold text-white mb-2">
             Robotic Arm System Leaf Detection & Grasping
