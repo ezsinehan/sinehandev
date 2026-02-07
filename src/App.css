@@ -1,0 +1,14 @@
+.portfolio-box {
+    background: #faf7f0;
+    border: 2px solid #e5decf;
+    border-radius: 4px;
+    padding: 2rem 2.5rem;
+    max-width: 360px;
+    box-shadow: 0 2px 8px rgba(229, 222, 207, 0.4);
+}
+
+
+.portfolio-text {
+    font-family: Kavivanar, cursive;
+    font-size: clamp(0.95rem, 2.5vw + 0.9rem, 1.35rem);
+}

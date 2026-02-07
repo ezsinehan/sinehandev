@@ -10,7 +10,9 @@ function App() {
         alignItems: 'center', // vertical centering
         justifyContent: 'center' // horizontal centering
       }}>
-        <p style={{ fontFamily: 'Kavivanar, cursive'}}>sinehan's portfolio is under renovation</p>
+        <div className='portfolio-box'>
+          <p className="portfolio-text">sinehan's portfolio is under renovation</p>
+        </div>
       </div>
 
     </>
