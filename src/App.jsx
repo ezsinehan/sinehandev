@@ -14,6 +14,26 @@ function App() {
 
   return (
     <>
+      <div className="corner-links">
+        <a
+          href="https://legacy.sinehan.dev"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="corner-link"
+          aria-label="View my old portfolio"
+        >
+          here's my old portfolio
+        </a>
+        <a
+          href="https://studybox.sinehan.dev"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="corner-link"
+          aria-label="View Studybox"
+        >
+          studybox if you were looking for that
+        </a>
+      </div>
       <div style={{
         height: '100vh', // we need to define high so that we can center the text vertically
         display: 'flex', // flexbox display

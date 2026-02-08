@@ -1,3 +1,43 @@
+/* Fixed in top-left; same font/colors as the rest of the page */
+.corner-links {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.corner-link {
+    position: relative;
+    font-family: Kavivanar, cursive;
+    font-size: 0.9rem;
+    color: #6b6359;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: color 0.2s;
+}
+
+/* Animated underline: line draws in from the left on hover */
+.corner-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 0;
+    height: 1px;
+    background-color: #c9c0b2;
+    transition: width 0.25s ease;
+}
+
+.corner-link:hover {
+    color: #4a4540;
+}
+
+.corner-link:hover::after {
+    width: 100%;
+}
+
 .portfolio-box {
     background: #faf7f0;
     border: 2px solid #e5decf;
