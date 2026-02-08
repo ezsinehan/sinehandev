@@ -43,7 +43,7 @@ function App() {
         <div className='portfolio-box'>
           <p className="portfolio-text">sinehan's portfolio is under renovation</p>
           <nav className="portfolio-socials" aria-label="Social links">
-            <a href="https://github.com/ezsinehan" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+            <a href="https://github.com/ezsinehan" target="_blank" rel="noopener noreferrer" aria-label="My GitHub" title="here's my github">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="portfolio-icon" aria-hidden="true">
                 <g fill="currentColor">
                   <polygon points="4,4 6.5,0 9,4"/>
@@ -55,7 +55,7 @@ function App() {
                 </g>
               </svg>
             </a>
-            <button type="button" className="portfolio-socials__copy" onClick={copyEmail} aria-label="Copy email">
+            <button type="button" className="portfolio-socials__copy" onClick={copyEmail} aria-label="Copy my email" title="copy my email">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="portfolio-icon" aria-hidden="true">
                 <rect x="4" y="4" width="16" height="16" fill="currentColor"/>
                 <polyline
@@ -68,7 +68,7 @@ function App() {
                 />
               </svg>
             </button>
-            <a href="https://www.linkedin.com/in/sinehanezhilmuthu/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <a href="https://www.linkedin.com/in/sinehanezhilmuthu/" target="_blank" rel="noopener noreferrer" aria-label="My LinkedIn" title="here's my linkedin">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="portfolio-icon" aria-hidden="true">
                 <rect x="4" y="4" width="16" height="16" fill="currentColor"/>
                 <rect x="6.5" y="6.5" width="2" height="2" fill="#fff"/>
@@ -78,7 +78,7 @@ function App() {
                 <rect x="15" y="12" width="2" height="5" fill="#fff"/>
               </svg>
             </a>
-            <a href="/ezhilmuthu_sinehan_resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="Resume">
+            <a href="/ezhilmuthu_sinehan_resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="My resume" title="here's my resume">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="portfolio-icon" aria-hidden="true">
                 <rect x="4" y="4" width="16" height="16" fill="currentColor"/>
                 <rect x="6" y="6.75" width="12" height="1.5" fill="#fff"/>
