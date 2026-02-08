@@ -1,7 +1,7 @@
 .portfolio-box {
     background: #faf7f0;
     border: 2px solid #e5decf;
-    border-radius: 4px;
+    border-radius: 0px;
     padding: 2rem 2.5rem;
     max-width: 360px;
     box-shadow: 0 2px 8px rgba(229, 222, 207, 0.4);
@@ -11,4 +11,50 @@
 .portfolio-text {
     font-family: Kavivanar, cursive;
     font-size: clamp(0.95rem, 2.5vw + 0.9rem, 1.35rem);
+    color: #4a4540;
+    letter-spacing: 0.03em;
+    margin: 0 0 0.6rem 0;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid #e5decf;
+    white-space: nowrap;
+}
+
+.portfolio-socials {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+.portfolio-socials a,
+.portfolio-socials button {
+    color: #c9c0b2;
+    transition: color 0.2s;
+}
+
+.portfolio-socials a:hover,
+.portfolio-socials button:hover {
+    color: #6b6359;
+}
+
+.portfolio-socials__copy {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font: inherit;
+}
+
+.portfolio-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    display: block;
+}
+
+.copy-toast {
+    margin-top: 1rem;
+    color: #4a4540;
+    font-family: Kavivanar, cursive;
+    font-size: 0.85rem;
+    text-align: center;
 }
