@@ -1,25 +1,54 @@
-/* Fixed in top-left; same font/colors as the rest of the page */
-.corner-links {
+
+
+.debug-grid {
     position: fixed;
-    bottom: 1rem;
-    right: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
+    inset: 0;
+    background-image:
+        linear-gradient(to right, rgba(255, 0, 0, 0.1) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 0, 0, 0.1) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+    z-index: 9999;
 }
 
-.corner-link {
-    position: relative;
+.debug-grid-toggle {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
     font-family: Kavivanar, cursive;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    color: #6b6359;
+    background: #faf7f0;
+    border: 1px solid #e5decf;
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
+    z-index: 10000;
+}
+
+.nav-box {
+    position: fixed;
+    top: 4rem;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.nav-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+}
+
+.nav-tab {
+    font-family: Kavivanar, cursive;
+    font-size: 1.1rem;
     color: #6b6359;
     text-decoration: none;
     letter-spacing: 0.03em;
+    position: relative;
     transition: color 0.2s;
 }
 
-/* Animated underline: line draws in from the left on hover */
-.corner-link::after {
+.nav-tab::after {
     content: '';
     position: absolute;
     left: 0;
@@ -30,40 +59,29 @@
     transition: width 0.25s ease;
 }
 
-.corner-link:hover {
+.nav-tab:hover {
     color: #4a4540;
 }
 
-.corner-link:hover::after {
+.nav-tab:hover::after {
     width: 100%;
 }
 
-.portfolio-box {
+.portfolio-socials-box {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
     background: #faf7f0;
     border: 2px solid #e5decf;
-    border-radius: 0px;
-    padding: 2rem 2.5rem;
-    max-width: 360px;
+    padding: 0.75rem 1.25rem;
     box-shadow: 0 2px 8px rgba(229, 222, 207, 0.4);
-}
-
-
-.portfolio-text {
-    font-family: Kavivanar, cursive;
-    font-size: clamp(0.95rem, 2.5vw + 0.9rem, 1.35rem);
-    color: #4a4540;
-    letter-spacing: 0.03em;
-    margin: 0 0 0.6rem 0;
-    padding-bottom: 0.6rem;
-    border-bottom: 1px solid #e5decf;
-    white-space: nowrap;
 }
 
 .portfolio-socials {
     display: flex;
     justify-content: center;
     gap: 0.75rem;
-    margin-top: 1.25rem;
 }
 
 .portfolio-socials a,
@@ -91,10 +109,64 @@
     display: block;
 }
 
+
+.section-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.section-breadcrumb__name {
+    font-family: Kavivanar, cursive;
+    font-size: 1.1rem;
+    color: #a09489;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.2s;
+}
+
+.section-breadcrumb__name::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 0;
+    height: 1px;
+    background-color: #c9c0b2;
+    transition: width 0.25s ease;
+}
+
+.section-breadcrumb__name:hover {
+    color: #6b6359;
+}
+
+.section-breadcrumb__name:hover::after {
+    width: 100%;
+}
+
+.section-breadcrumb__arrow {
+    font-size: 1.1rem;
+    color: #a09489;
+    line-height: 1;
+}
+
+.section-breadcrumb__title {
+    font-family: Kavivanar, cursive;
+    font-size: 1.1rem;
+    color: #4a4540;
+    letter-spacing: 0.03em;
+}
+
 .copy-toast {
-    margin-top: 1rem;
+    position: fixed;
+    bottom: 5.5rem;
+    left: 0;
+    right: 0;
+    margin: 0;
     color: #4a4540;
     font-family: Kavivanar, cursive;
     font-size: 0.85rem;
     text-align: center;
+    white-space: nowrap;
 }

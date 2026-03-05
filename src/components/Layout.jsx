@@ -1,0 +1,135 @@
+import { useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { AnimatePresence, motion } from 'motion/react'
+import '../App.css'
+
+const EMAIL = 'ezsinehan@gmail.com'
+
+const SECTION_TITLES = {
+  '/about': 'about',
+  '/projects': 'projects',
+  '/blog': 'blog',
+}
+
+export default function Layout({ children }) {
+  const [showGrid, setShowGrid] = useState(false)
+  const [showCopied, setShowCopied] = useState(false)
+  const location = useLocation()
+
+  const copyEmail = () => {
+    navigator.clipboard.writeText(EMAIL)
+    setShowCopied(true)
+    setTimeout(() => setShowCopied(false), 2000)
+  }
+
+  const isHome = location.pathname === '/'
+  const sectionTitle = SECTION_TITLES[location.pathname]
+
+  return (
+    <>
+      {showGrid && <div className="debug-grid" aria-hidden="true" />}
+      <button className="debug-grid-toggle" onClick={() => setShowGrid(g => !g)}>
+        {showGrid ? 'hide grid' : 'show grid'}
+      </button>
+
+      <div className="nav-box">
+        <AnimatePresence mode="wait">
+          {isHome ? (
+            <motion.nav
+              key="tabs"
+              className="nav-tabs"
+              aria-label="Main navigation"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Link to="/about" className="nav-tab">about</Link>
+              <Link to="/projects" className="nav-tab">projects</Link>
+              <Link to="/blog" className="nav-tab">blog</Link>
+            </motion.nav>
+          ) : (
+            <motion.div
+              key="breadcrumb"
+              className="section-breadcrumb"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Link to="/" className="section-breadcrumb__name">home</Link>
+              <span className="section-breadcrumb__arrow">›</span>
+              <span className="section-breadcrumb__title">{sectionTitle}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      <div className="portfolio-socials-box">
+        <nav className="portfolio-socials" aria-label="Social links">
+          <a href="https://github.com/ezsinehan" target="_blank" rel="noopener noreferrer" aria-label="My GitHub" title="here's my github">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="portfolio-icon" aria-hidden="true">
+              <g fill="currentColor">
+                <polygon points="4,4 6.5,0 9,4"/>
+                <polygon points="15,4 17.5,0 20,4"/>
+                <rect x="4" y="4" width="16" height="16"/>
+                <rect x="6" y="9" width="12" height="6" fill="#fff"/>
+                <rect x="7" y="10" width="3" height="4"/>
+                <rect x="14" y="10" width="3" height="4"/>
+              </g>
+            </svg>
+          </a>
+          <button type="button" className="portfolio-socials__copy" onClick={copyEmail} aria-label="Copy my email" title="copy my email">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="portfolio-icon" aria-hidden="true">
+              <rect x="4" y="4" width="16" height="16" fill="currentColor"/>
+              <polyline
+                points="4,4 12,12 20,4"
+                fill="none"
+                stroke="#fff"
+                strokeWidth="1.5"
+                strokeLinejoin="miter"
+                strokeLinecap="square"
+              />
+            </svg>
+          </button>
+          <a href="https://www.linkedin.com/in/sinehanezhilmuthu/" target="_blank" rel="noopener noreferrer" aria-label="My LinkedIn" title="here's my linkedin">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="portfolio-icon" aria-hidden="true">
+              <rect x="4" y="4" width="16" height="16" fill="currentColor"/>
+              <rect x="6.5" y="6.5" width="2" height="2" fill="#fff"/>
+              <rect x="6.5" y="10" width="2" height="7" fill="#fff"/>
+              <rect x="11" y="10" width="2" height="7" fill="#fff"/>
+              <rect x="13" y="10" width="4" height="2" fill="#fff"/>
+              <rect x="15" y="12" width="2" height="5" fill="#fff"/>
+            </svg>
+          </a>
+          <a href="/ezhilmuthu_sinehan_resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="My resume" title="here's my resume">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="portfolio-icon" aria-hidden="true">
+              <rect x="4" y="4" width="16" height="16" fill="currentColor"/>
+              <rect x="6" y="6.75" width="12" height="1.5" fill="#fff"/>
+              <rect x="6" y="9.75" width="12" height="1.5" fill="#fff"/>
+              <rect x="6" y="12.75" width="12" height="1.5" fill="#fff"/>
+              <rect x="6" y="15.75" width="7" height="1.5" fill="#fff"/>
+            </svg>
+          </a>
+        </nav>
+      </div>
+      <AnimatePresence>
+        {showCopied && (
+          <motion.p
+            className="copy-toast"
+            role="status"
+            aria-live="polite"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+          >
+            Email copied to clipboard
+          </motion.p>
+        )}
+      </AnimatePresence>
+
+      {children}
+    </>
+  )
+}
