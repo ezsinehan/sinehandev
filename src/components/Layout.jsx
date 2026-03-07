@@ -24,7 +24,9 @@ export default function Layout({ children }) {
 
   const [scrolled, setScrolled] = useState(false)
   const isHome = location.pathname === '/'
-  const sectionTitle = SECTION_TITLES[location.pathname]
+  const sectionTitle = location.pathname.startsWith('/blog/')
+    ? 'blog'
+    : SECTION_TITLES[location.pathname]
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50)
