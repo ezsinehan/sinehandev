@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { motion } from "motion/react";
+import { motion as Motion } from "motion/react";
 import "./About.css";
 
 const SECTIONS = [
@@ -10,11 +10,12 @@ const SECTIONS = [
 
 export default function About() {
   const [activeId, setActiveId] = useState("intro");
-  const observerRef = useRef(null);
+  const [isAutoScrolling, setIsAutoScrolling] = useState(false);
+  const scrollTimerRef = useRef(null);
 
   useEffect(() => {
     const onScroll = () => {
-      if (clickingRef.current) return;
+      if (isAutoScrolling) return;
       let closest = SECTIONS[0].id;
       let closestDist = Infinity;
       for (const { id } of SECTIONS) {
@@ -31,19 +32,29 @@ export default function About() {
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [isAutoScrolling]);
 
-  const clickingRef = useRef(false);
+  useEffect(() => {
+    return () => {
+      if (scrollTimerRef.current) {
+        clearTimeout(scrollTimerRef.current);
+      }
+    };
+  }, []);
 
   const scrollTo = (id) => {
     const el = document.getElementById(id);
     if (!el) return;
     setActiveId(id);
-    clickingRef.current = true;
+    setIsAutoScrolling(true);
+    if (scrollTimerRef.current) {
+      clearTimeout(scrollTimerRef.current);
+    }
     const top = el.getBoundingClientRect().top + window.scrollY - 200;
     window.scrollTo({ top, behavior: "smooth" });
-    setTimeout(() => {
-      clickingRef.current = false;
+    scrollTimerRef.current = setTimeout(() => {
+      setIsAutoScrolling(false);
+      scrollTimerRef.current = null;
     }, 800);
   };
 
@@ -51,7 +62,7 @@ export default function About() {
     <div className="about-layout">
       <nav className="about-toc" aria-label="Page sections">
         {SECTIONS.map(({ id, label }, i) => (
-          <motion.button
+          <Motion.button
             key={label}
             className={`about-toc__item${activeId === id ? " about-toc__item--active" : ""}`}
             onClick={() => scrollTo(id)}
@@ -60,11 +71,11 @@ export default function About() {
             transition={{ duration: 0.35, delay: 0.5 + i * 0.12 }}
           >
             {label}
-          </motion.button>
+          </Motion.button>
         ))}
       </nav>
 
-      <motion.div
+      <Motion.div
         className="about-page"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
@@ -112,7 +123,7 @@ export default function About() {
             </li>
           </ul>
         </section>
-      </motion.div>
+      </Motion.div>
     </div>
   );
 }
