@@ -78,14 +78,37 @@
   position: fixed;
   top: 1rem;
   left: 1rem;
-  font-family: Kavivanar, cursive;
-  font-size: 0.8rem;
-  color: #6b6359;
-  background: #faf7f0;
-  border: 1px solid #e5decf;
-  padding: 0.3rem 0.6rem;
+  display: inline-block;
+  color: #c9c0b2;
+  background: none;
+  border: none;
+  padding: 0;
   cursor: pointer;
+  transition: color 0.2s, transform 0.2s;
+  transform-origin: center;
+  line-height: 0;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
   z-index: 10000;
+}
+
+.debug-grid-toggle .portfolio-icon {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.debug-grid-toggle:hover {
+  color: #6b6359;
+}
+
+.debug-grid-toggle:focus-visible {
+  color: #6b6359;
+}
+
+.debug-grid-toggle--active {
+  color: #6b6359;
+  transform: rotate(45deg);
 }
 
 .nav-box {

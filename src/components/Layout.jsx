@@ -35,8 +35,19 @@ export default function Layout({ children }) {
   return (
     <>
       {showGrid && <div className="debug-grid" aria-hidden="true" />}
-      <button className="debug-grid-toggle" onClick={() => setShowGrid(g => !g)}>
-        {showGrid ? 'hide grid' : 'show grid'}
+      <button
+        className={`debug-grid-toggle${showGrid ? ' debug-grid-toggle--active' : ''}`}
+        onClick={() => setShowGrid(g => !g)}
+        aria-label={showGrid ? 'Hide alignment grid' : 'Show alignment grid'}
+        title={showGrid ? 'hide grid' : 'show grid'}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="portfolio-icon" aria-hidden="true">
+          <rect x="4" y="4" width="16" height="16" fill="currentColor" />
+          <rect x="6" y="6" width="5" height="5" fill="#fff" />
+          <rect x="13" y="6" width="5" height="5" fill="#fff" />
+          <rect x="6" y="13" width="5" height="5" fill="#fff" />
+          <rect x="13" y="13" width="5" height="5" fill="#fff" />
+        </svg>
       </button>
 
       <div className="nav-box">

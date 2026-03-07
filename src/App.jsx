@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import './App.css'
 import Layout from './components/Layout'
@@ -8,6 +9,19 @@ import Projects from './pages/Projects'
 import Blog from './pages/Blog'
 
 function App() {
+  useEffect(() => {
+    const activeTitle = "sinehan's website"
+    const awayTitle = 'was it me😔'
+
+    const syncTitle = () => {
+      document.title = document.hidden ? awayTitle : activeTitle
+    }
+
+    syncTitle()
+    document.addEventListener('visibilitychange', syncTitle)
+    return () => document.removeEventListener('visibilitychange', syncTitle)
+  }, [])
+
   return (
     <Layout>
       <Routes>
