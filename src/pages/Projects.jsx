@@ -1,26 +1,31 @@
 import './Projects.css'
+import placeholderImage from '../assets/project-placeholder.svg'
 
-const PROJECT_TITLES = [
-  'project 01',
-  'project 02',
-  'project 03',
-  'project 04',
-  'project 05',
-  'project 06',
-  'project 07',
-  'project 08',
-  'project 09',
-  'project 10',
+const PROJECTS = [
+  { id: 'p1', title: 'project 01', summary: 'short description goes here' },
+  { id: 'p2', title: 'project 02', summary: 'short description goes here' },
+  { id: 'p3', title: 'project 03', summary: 'short description goes here' },
+  { id: 'p4', title: 'project 04', summary: 'short description goes here' },
+  { id: 'p5', title: 'project 05', summary: 'short description goes here' },
+  { id: 'p6', title: 'project 06', summary: 'short description goes here' },
 ]
 
 export default function Projects() {
   return (
     <main className="projects-page" aria-label="Projects list">
       <section className="projects-grid">
-        {PROJECT_TITLES.map((title) => (
-          <h2 key={title} className="projects-title-item">
-            {title}
-          </h2>
+        {PROJECTS.map((project) => (
+          <article key={project.id} className="project-tile">
+            <img
+              src={placeholderImage}
+              alt={`${project.title} preview`}
+              className="project-tile__image"
+            />
+            <div className="project-tile__body">
+              <h2 className="project-tile__title">{project.title}</h2>
+              <p className="project-tile__summary">{project.summary}</p>
+            </div>
+          </article>
         ))}
       </section>
     </main>
