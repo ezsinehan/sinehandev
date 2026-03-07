@@ -81,3 +81,17 @@
   height: 100%;
   overflow: visible;
 }
+
+.home-dev-note {
+  position: absolute;
+  left: 7%;
+  bottom: 16%;
+  max-width: 30rem;
+  margin: 0;
+  font-family: Kavivanar, cursive;
+  font-size: 1rem;
+  line-height: 1.55;
+  letter-spacing: 0.02em;
+  color: #b24a45;
+  white-space: normal;
+}

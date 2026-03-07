@@ -76,9 +76,13 @@
 
 .debug-grid-toggle {
   position: fixed;
-  top: 1rem;
-  left: 1rem;
-  display: inline-block;
+  top: 32px;
+  left: 32px;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: #c9c0b2;
   background: none;
   border: none;
@@ -94,8 +98,8 @@
 }
 
 .debug-grid-toggle .portfolio-icon {
-  width: 1.35rem;
-  height: 1.35rem;
+  width: 2.25rem;
+  height: 2.25rem;
 }
 
 .debug-grid-toggle:hover {

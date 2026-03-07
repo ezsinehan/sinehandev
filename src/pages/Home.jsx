@@ -229,6 +229,17 @@ export default function Home() {
           )}
         </motion.span>
       ))}
+
+      <motion.p
+        className="home-dev-note"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.45, delay: 1.15 }}
+      >
+        you will probably quickly realize this website still in progress, please
+        please please text me on linkedin or email or whatever if you have tips
+        or see bugs
+      </motion.p>
     </div>
   );
 }
