@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { motion } from "motion/react";
+import { motion as Motion } from "motion/react";
 import Typewriter from "typewriter-effect";
 import "./Home.css";
 
@@ -145,7 +145,7 @@ export default function Home() {
 
   return (
     <div className="home">
-      <motion.div
+      <Motion.div
         id="home-title"
         className="home__title-wrapper"
         initial={{ opacity: 0 }}
@@ -173,11 +173,11 @@ export default function Home() {
             }}
           />
         </h1>
-      </motion.div>
+      </Motion.div>
 
       <svg className="home-arrows-svg">
         {arrows.map(({ key, lx, ly, tx, ty, cpx, cpy, flipArrow }, i) => (
-          <motion.g
+          <Motion.g
             key={key}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -202,12 +202,12 @@ export default function Home() {
               strokeLinecap="round"
               strokeLinejoin="round"
             />
-          </motion.g>
+          </Motion.g>
         ))}
       </svg>
 
       {ANNOTATIONS.map(({ key, label, rotation, small, emojiLink }, i) => (
-        <motion.span
+        <Motion.span
           key={key}
           ref={(el) => (labelRefs.current[key] = el)}
           className={`home-label home-label--${key}${small ? " home-label--small" : ""}`}
@@ -227,10 +227,10 @@ export default function Home() {
               {emojiLink.emoji}
             </a>
           )}
-        </motion.span>
+        </Motion.span>
       ))}
 
-      <motion.p
+      <Motion.p
         className="home-dev-note"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -239,7 +239,7 @@ export default function Home() {
         you will probably quickly realize this website still in progress, please
         please please text me on linkedin or email or whatever if you have tips
         or see bugs
-      </motion.p>
+      </Motion.p>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence, motion as Motion } from 'motion/react'
 import '../App.css'
 
 const EMAIL = 'ezsinehan@gmail.com'
@@ -53,7 +53,7 @@ export default function Layout({ children }) {
       <div className="nav-box">
         <AnimatePresence mode="wait">
           {isHome ? (
-            <motion.nav
+            <Motion.nav
               key="tabs"
               className="nav-tabs"
               aria-label="Main navigation"
@@ -65,9 +65,9 @@ export default function Layout({ children }) {
               <Link to="/about" className="nav-tab" id="nav-about">about</Link>
               <Link to="/projects" className="nav-tab" id="nav-projects">projects</Link>
               <Link to="/blog" className="nav-tab" id="nav-blog">blog</Link>
-            </motion.nav>
+            </Motion.nav>
           ) : (
-            <motion.div
+            <Motion.div
               key="breadcrumb"
               className="section-breadcrumb"
               initial={{ opacity: 0, y: 8 }}
@@ -76,7 +76,7 @@ export default function Layout({ children }) {
               transition={{ duration: 0.2 }}
             >
               <span className="section-breadcrumb__title">sinehan's {sectionTitle}</span>
-            </motion.div>
+            </Motion.div>
           )}
         </AnimatePresence>
       </div>
@@ -131,7 +131,7 @@ export default function Layout({ children }) {
       </div>
       <AnimatePresence>
         {showCopied && (
-          <motion.p
+          <Motion.p
             className="copy-toast"
             role="status"
             aria-live="polite"
@@ -141,12 +141,12 @@ export default function Layout({ children }) {
             transition={{ duration: 0.2 }}
           >
             Email copied to clipboard
-          </motion.p>
+          </Motion.p>
         )}
       </AnimatePresence>
 
       {!isHome && (
-        <motion.div
+        <Motion.div
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.35, delay: 0.5 }}
@@ -154,7 +154,7 @@ export default function Layout({ children }) {
           <Link to="/" className="home-button" aria-label="Back to home">
             home
           </Link>
-        </motion.div>
+        </Motion.div>
       )}
 
       {children}
