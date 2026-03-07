@@ -53,3 +53,19 @@ The site remains in the same visual language (Kavivanar + muted palette + pixel 
 ## Validation notes
 - `npm run build` was run repeatedly after major UI edits and passed.
 - Build still emits Vite's chunk-size warning (>500kb), non-blocking.
+
+---
+
+## Session update log for work done on 2026-03-07
+
+### Outcome
+Completed a discovery pass focused on blog-page implementation planning and documented architecture/UI recommendations.
+
+### Work completed
+1. Reviewed `CLAUDE.md` and current route/component structure for `/blog`.
+2. Audited relevant layout/style files to capture constraints from the shared shell.
+3. Authored `devnotes/blog-page-design-research.md` with:
+   - current-state summary
+   - architecture options (local array vs markdown vs CMS)
+   - visual direction options
+   - phased MVP recommendation
