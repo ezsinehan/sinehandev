@@ -1,172 +1,200 @@
-
-
 .debug-grid {
-    position: fixed;
-    inset: 0;
-    background-image:
-        linear-gradient(to right, rgba(255, 0, 0, 0.1) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 0, 0, 0.1) 1px, transparent 1px);
-    background-size: 32px 32px;
-    pointer-events: none;
-    z-index: 9999;
+  position: fixed;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      rgba(255, 0, 0, 0.05) 0px,
+      rgba(255, 0, 0, 0.05) 32px,
+      transparent 32px,
+      transparent 64px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 0, 0, 0.05) 0px,
+      rgba(255, 0, 0, 0.05) 32px,
+      transparent 32px,
+      transparent 64px
+    ),
+    linear-gradient(to right, rgba(255, 0, 0, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 0, 0, 0.12) 1px, transparent 1px);
+  background-size:
+    64px 100%,
+    100% 64px,
+    32px 32px,
+    32px 32px;
+  background-position:
+    calc(50vw - 32px) 0,
+    0 calc(50vh - 32px),
+    calc(50vw) calc(50vh),
+    calc(50vw) calc(50vh);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.debug-grid::before,
+.debug-grid::after {
+  content: "";
+  position: fixed;
+  pointer-events: none;
+}
+
+.debug-grid::before {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  margin-left: -1px;
+  background: rgba(255, 0, 0, 0.35);
+}
+
+.debug-grid::after {
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: rgba(255, 0, 0, 0.35);
+}
+
+.home-button {
+  position: fixed;
+  top: 4rem;
+  left: 5rem;
+  font-family: Kavivanar, cursive;
+  font-size: 1.2rem;
+  color: #c9c0b2;
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: color 0.2s;
+  z-index: 100;
+}
+
+.home-button:hover {
+  color: #6b6359;
 }
 
 .debug-grid-toggle {
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    font-family: Kavivanar, cursive;
-    font-size: 0.8rem;
-    color: #6b6359;
-    background: #faf7f0;
-    border: 1px solid #e5decf;
-    padding: 0.3rem 0.6rem;
-    cursor: pointer;
-    z-index: 10000;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  font-family: Kavivanar, cursive;
+  font-size: 0.8rem;
+  color: #6b6359;
+  background: #faf7f0;
+  border: 1px solid #e5decf;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+  z-index: 10000;
 }
 
 .nav-box {
-    position: fixed;
-    top: 4rem;
-    left: 50%;
-    transform: translateX(-50%);
+  position: fixed;
+  top: 4rem;
+  left: 50%;
+  transform: translateX(calc(-50% - 8px));
 }
 
 .nav-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 2.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
 }
 
 .nav-tab {
-    font-family: Kavivanar, cursive;
-    font-size: 1.1rem;
-    color: #6b6359;
-    text-decoration: none;
-    letter-spacing: 0.03em;
-    position: relative;
-    transition: color 0.2s;
+  font-family: Kavivanar, cursive;
+  font-size: 1.1rem;
+  color: #6b6359;
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  position: relative;
+  transition: color 0.2s;
 }
 
 .nav-tab::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -2px;
-    width: 0;
-    height: 1px;
-    background-color: #c9c0b2;
-    transition: width 0.25s ease;
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 1px;
+  background-color: #c9c0b2;
+  transition: width 0.25s ease;
 }
 
 .nav-tab:hover {
-    color: #4a4540;
+  color: #4a4540;
 }
 
 .nav-tab:hover::after {
-    width: 100%;
+  width: 100%;
 }
 
 .portfolio-socials-box {
-    position: fixed;
-    bottom: 1.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #faf7f0;
-    border: 2px solid #e5decf;
-    padding: 0.75rem 1.25rem;
-    box-shadow: 0 2px 8px rgba(229, 222, 207, 0.4);
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #faf7f0;
+  border: 2px solid #e5decf;
+  padding: 0.75rem 1.25rem;
+  box-shadow: 0 2px 8px rgba(229, 222, 207, 0.4);
 }
 
 .portfolio-socials {
-    display: flex;
-    justify-content: center;
-    gap: 0.75rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
 }
 
 .portfolio-socials a,
 .portfolio-socials button {
-    color: #c9c0b2;
-    transition: color 0.2s;
+  color: #c9c0b2;
+  transition: color 0.2s;
 }
 
 .portfolio-socials a:hover,
 .portfolio-socials button:hover {
-    color: #6b6359;
+  color: #6b6359;
 }
 
 .portfolio-socials__copy {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    font: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
 }
 
 .portfolio-icon {
-    width: 2.25rem;
-    height: 2.25rem;
-    display: block;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: block;
 }
-
 
 .section-breadcrumb {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-}
-
-.section-breadcrumb__name {
-    font-family: Kavivanar, cursive;
-    font-size: 1.1rem;
-    color: #a09489;
-    letter-spacing: 0.03em;
-    text-decoration: none;
-    position: relative;
-    transition: color 0.2s;
-}
-
-.section-breadcrumb__name::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -2px;
-    width: 0;
-    height: 1px;
-    background-color: #c9c0b2;
-    transition: width 0.25s ease;
-}
-
-.section-breadcrumb__name:hover {
-    color: #6b6359;
-}
-
-.section-breadcrumb__name:hover::after {
-    width: 100%;
-}
-
-.section-breadcrumb__arrow {
-    font-size: 1.1rem;
-    color: #a09489;
-    line-height: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .section-breadcrumb__title {
-    font-family: Kavivanar, cursive;
-    font-size: 1.1rem;
-    color: #4a4540;
-    letter-spacing: 0.03em;
+  font-family: Kavivanar, cursive;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: #c9c0b2;
+  letter-spacing: 0.03em;
 }
 
 .copy-toast {
-    position: fixed;
-    bottom: 5.5rem;
-    left: 0;
-    right: 0;
-    margin: 0;
-    color: #4a4540;
-    font-family: Kavivanar, cursive;
-    font-size: 0.85rem;
-    text-align: center;
-    white-space: nowrap;
+  position: fixed;
+  bottom: 5.5rem;
+  left: 0;
+  right: 0;
+  margin: 0;
+  color: #4a4540;
+  font-family: Kavivanar, cursive;
+  font-size: 0.85rem;
+  text-align: center;
+  white-space: nowrap;
 }

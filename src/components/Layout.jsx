@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'motion/react'
 import '../App.css'
@@ -22,8 +22,15 @@ export default function Layout({ children }) {
     setTimeout(() => setShowCopied(false), 2000)
   }
 
+  const [scrolled, setScrolled] = useState(false)
   const isHome = location.pathname === '/'
   const sectionTitle = SECTION_TITLES[location.pathname]
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 50)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   return (
     <>
@@ -44,28 +51,26 @@ export default function Layout({ children }) {
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.2 }}
             >
-              <Link to="/about" className="nav-tab">about</Link>
-              <Link to="/projects" className="nav-tab">projects</Link>
-              <Link to="/blog" className="nav-tab">blog</Link>
+              <Link to="/about" className="nav-tab" id="nav-about">about</Link>
+              <Link to="/projects" className="nav-tab" id="nav-projects">projects</Link>
+              <Link to="/blog" className="nav-tab" id="nav-blog">blog</Link>
             </motion.nav>
           ) : (
             <motion.div
               key="breadcrumb"
               className="section-breadcrumb"
               initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={{ opacity: scrolled ? 0 : 1, y: scrolled ? -8 : 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.2 }}
             >
-              <Link to="/" className="section-breadcrumb__name">home</Link>
-              <span className="section-breadcrumb__arrow">›</span>
-              <span className="section-breadcrumb__title">{sectionTitle}</span>
+              <span className="section-breadcrumb__title">sinehan's {sectionTitle}</span>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      <div className="portfolio-socials-box">
+      <div className="portfolio-socials-box" id="social-bar">
         <nav className="portfolio-socials" aria-label="Social links">
           <a href="https://github.com/ezsinehan" target="_blank" rel="noopener noreferrer" aria-label="My GitHub" title="here's my github">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="portfolio-icon" aria-hidden="true">
@@ -128,6 +133,18 @@ export default function Layout({ children }) {
           </motion.p>
         )}
       </AnimatePresence>
+
+      {!isHome && (
+        <motion.div
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.35, delay: 0.5 }}
+        >
+          <Link to="/" className="home-button" aria-label="Back to home">
+            home
+          </Link>
+        </motion.div>
+      )}
 
       {children}
     </>
