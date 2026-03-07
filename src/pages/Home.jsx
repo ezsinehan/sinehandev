@@ -1,100 +1,245 @@
-import { useState } from 'react'
-import '../App.css'
+import { useEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
+import Typewriter from "typewriter-effect";
+import "./Home.css";
 
-const EMAIL = 'ezsinehan@gmail.com'
+const ANNOTATIONS = [
+  {
+    key: "about",
+    targetId: "nav-about",
+    label: "sneak peak of me",
+    rotation: -3,
+    anchorX: "center",
+    sourceAnchor: "right",
+  },
+  {
+    key: "projects",
+    targetId: "nav-projects",
+    label: "things i've worked on",
+    rotation: 1,
+    anchorX: "center",
+  },
+  {
+    key: "blog",
+    targetId: "nav-blog",
+    label: "thoughts and notes - ive always wanted a blog",
+    rotation: 3,
+    anchorX: "right",
+  },
+  {
+    key: "socials",
+    targetId: "social-bar",
+    label: "my socials!",
+    rotation: -2,
+    anchorX: "center",
+  },
+  {
+    key: "title",
+    targetId: "home-title",
+    label:
+      "the typewriter is a homage to my portfolio v1, i don't even like it anymore and hopefully you never see it ",
+    emojiLink: { emoji: "😉", href: "https://legacy.sinehan.dev" },
+    rotation: 2,
+    anchorXOffset: 180,
+    approachFrom: "southeast",
+    small: true,
+  },
+];
+
+function arrowhead(tx, ty, cpx, cpy) {
+  const angle = Math.atan2(ty - cpy, tx - cpx);
+  const size = 10;
+  const a1x = tx - size * Math.cos(angle - 0.5);
+  const a1y = ty - size * Math.sin(angle - 0.5);
+  const a2x = tx - size * Math.cos(angle + 0.5);
+  const a2y = ty - size * Math.sin(angle + 0.5);
+  return `M ${a1x} ${a1y} L ${tx} ${ty} L ${a2x} ${a2y}`;
+}
 
 export default function Home() {
-  const [showCopied, setShowCopied] = useState(false)
+  const labelRefs = useRef({});
+  const [arrows, setArrows] = useState([]);
 
-  const copyEmail = () => {
-    navigator.clipboard.writeText(EMAIL)
-    setShowCopied(true)
-    setTimeout(() => setShowCopied(false), 2000)
-  }
+  const measure = () => {
+    const next = [];
+    for (const {
+      key,
+      targetId,
+      anchorX,
+      anchorXFraction,
+      anchorXOffset,
+      approachFrom,
+      flipArrow,
+      sourceAnchor,
+    } of ANNOTATIONS) {
+      const labelEl = labelRefs.current[key];
+      const targetEl = document.getElementById(targetId);
+      if (!labelEl || !targetEl) continue;
+
+      const lr = labelEl.getBoundingClientRect();
+      const tr = targetEl.getBoundingClientRect();
+
+      // start from edge of label closest to target
+      const lx =
+        sourceAnchor === "right"
+          ? lr.right + 12
+          : sourceAnchor === "left"
+            ? lr.left - 12
+            : lr.left + lr.width / 2;
+      const ly =
+        sourceAnchor === "right" || sourceAnchor === "left"
+          ? lr.top + lr.height / 2
+          : tr.top > lr.top
+            ? lr.bottom
+            : lr.top;
+
+      // end near target but with padding
+      const tx =
+        anchorXOffset != null
+          ? tr.left + tr.width / 2 + anchorXOffset
+          : anchorXFraction != null
+            ? tr.left + tr.width * anchorXFraction
+            : anchorX === "right"
+              ? tr.right + 28
+              : tr.left + tr.width / 2;
+      const ty =
+        anchorX === "right" || anchorX === "left"
+          ? tr.top + tr.height / 2 + 2
+          : tr.top > lr.top
+            ? tr.top - 10
+            : tr.bottom + 10;
+
+      // control point: midpoint bowed perpendicular to the line
+      let cpx, cpy;
+      if (approachFrom === "southeast") {
+        const dist = Math.sqrt((tx - lx) ** 2 + (ty - ly) ** 2);
+        cpx = tx + dist * 0.25;
+        cpy = ty + dist * 0.25;
+      } else if (approachFrom === "below") {
+        cpx = tx;
+        cpy = ty + Math.abs(ly - ty) * 0.6;
+      } else {
+        const mx = (lx + tx) / 2;
+        const my = (ly + ty) / 2;
+        const dx = tx - lx;
+        const dy = ty - ly;
+        const len = Math.sqrt(dx * dx + dy * dy);
+        const bow = len * 0.3;
+        cpx = mx + (-dy / len) * bow;
+        cpy = my + (dx / len) * bow;
+      }
+
+      next.push({ key, lx, ly, tx, ty, cpx, cpy, flipArrow });
+    }
+    setArrows(next);
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(measure, 250);
+    window.addEventListener("resize", measure);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
 
   return (
-    <>
-      <div className="corner-links">
-        <a
-          href="https://legacy.sinehan.dev"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="corner-link"
-          aria-label="View my old portfolio"
+    <div className="home">
+      <motion.div
+        id="home-title"
+        className="home__title-wrapper"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+      >
+        <h1 className="home__title">
+          <Typewriter
+            options={{
+              strings: [
+                "hi, i'm sinehan",
+                "good day! i'm known as sinehan",
+                "greetings, i'm sinehan",
+                "howdy, sinehan here",
+                "salutations, i'm sinehan",
+                "hiya, i'm sinehan",
+                "yo, sinehan here",
+                "if you didn't know i'm sinehan",
+              ],
+              delay: 60,
+              deleteSpeed: 30,
+              pauseFor: 1800,
+              autoStart: true,
+              loop: true,
+            }}
+          />
+        </h1>
+      </motion.div>
+
+      <svg className="home-arrows-svg">
+        {arrows.map(({ key, lx, ly, tx, ty, cpx, cpy, flipArrow }, i) => (
+          <motion.g
+            key={key}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.55 + i * 0.12 }}
+          >
+            <path
+              d={`M ${lx} ${ly} Q ${cpx} ${cpy} ${tx} ${ty}`}
+              fill="none"
+              stroke="#b8ad9e"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+            <path
+              d={
+                flipArrow
+                  ? arrowhead(lx, ly, cpx, cpy)
+                  : arrowhead(tx, ty, cpx, cpy)
+              }
+              fill="none"
+              stroke="#b8ad9e"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </motion.g>
+        ))}
+      </svg>
+
+      {ANNOTATIONS.map(({ key, label, rotation, small, emojiLink }, i) => (
+        <motion.span
+          key={key}
+          ref={(el) => (labelRefs.current[key] = el)}
+          className={`home-label home-label--${key}${small ? " home-label--small" : ""}`}
+          style={{ transform: `rotate(${rotation}deg)` }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.4 + i * 0.12 }}
         >
-          here's my old portfolio
-        </a>
-        <a
-          href="https://studybox.sinehan.dev"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="corner-link"
-          aria-label="View Studybox"
-        >
-          studybox if you were looking for that
-        </a>
-      </div>
-      <div style={{
-        height: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        <div className='portfolio-box'>
-          <p className="portfolio-text">sinehan's portfolio is under renovation</p>
-          <nav className="portfolio-socials" aria-label="Social links">
-            <a href="https://github.com/ezsinehan" target="_blank" rel="noopener noreferrer" aria-label="My GitHub" title="here's my github">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="portfolio-icon" aria-hidden="true">
-                <g fill="currentColor">
-                  <polygon points="4,4 6.5,0 9,4"/>
-                  <polygon points="15,4 17.5,0 20,4"/>
-                  <rect x="4" y="4" width="16" height="16"/>
-                  <rect x="6" y="9" width="12" height="6" fill="#fff"/>
-                  <rect x="7" y="10" width="3" height="4"/>
-                  <rect x="14" y="10" width="3" height="4"/>
-                </g>
-              </svg>
+          {label}
+          {emojiLink && (
+            <a
+              href={emojiLink.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="home-label__emoji-link"
+            >
+              {emojiLink.emoji}
             </a>
-            <button type="button" className="portfolio-socials__copy" onClick={copyEmail} aria-label="Copy my email" title="copy my email">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="portfolio-icon" aria-hidden="true">
-                <rect x="4" y="4" width="16" height="16" fill="currentColor"/>
-                <polyline
-                  points="4,4 12,12 20,4"
-                  fill="none"
-                  stroke="#fff"
-                  strokeWidth="1.5"
-                  strokeLinejoin="miter"
-                  strokeLinecap="square"
-                />
-              </svg>
-            </button>
-            <a href="https://www.linkedin.com/in/sinehanezhilmuthu/" target="_blank" rel="noopener noreferrer" aria-label="My LinkedIn" title="here's my linkedin">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="portfolio-icon" aria-hidden="true">
-                <rect x="4" y="4" width="16" height="16" fill="currentColor"/>
-                <rect x="6.5" y="6.5" width="2" height="2" fill="#fff"/>
-                <rect x="6.5" y="10" width="2" height="7" fill="#fff"/>
-                <rect x="11" y="10" width="2" height="7" fill="#fff"/>
-                <rect x="13" y="10" width="4" height="2" fill="#fff"/>
-                <rect x="15" y="12" width="2" height="5" fill="#fff"/>
-              </svg>
-            </a>
-            <a href="/ezhilmuthu_sinehan_resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="My resume" title="here's my resume">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="portfolio-icon" aria-hidden="true">
-                <rect x="4" y="4" width="16" height="16" fill="currentColor"/>
-                <rect x="6" y="6.75" width="12" height="1.5" fill="#fff"/>
-                <rect x="6" y="9.75" width="12" height="1.5" fill="#fff"/>
-                <rect x="6" y="12.75" width="12" height="1.5" fill="#fff"/>
-                <rect x="6" y="15.75" width="7" height="1.5" fill="#fff"/>
-              </svg>
-            </a>
-          </nav>
-          {showCopied && (
-            <p className="copy-toast" role="status" aria-live="polite">
-              Email copied to clipboard
-            </p>
           )}
-        </div>
-      </div>
-    </>
-  )
+        </motion.span>
+      ))}
+
+      <motion.p
+        className="home-dev-note"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.45, delay: 1.15 }}
+      >
+        you will probably quickly realize this website still in progress, please
+        please please text me on linkedin or email or whatever if you have tips
+        or see bugs
+      </motion.p>
+    </div>
+  );
 }

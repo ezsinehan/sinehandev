@@ -1,0 +1,97 @@
+.home {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.home__title-wrapper {
+  position: absolute;
+  top: 50%;
+  left: calc(50% - 8px);
+  transform: translate(-50%, -50%);
+}
+
+.home__title {
+  font-family: Kavivanar, cursive;
+  font-size: 3.5rem;
+  font-weight: 400;
+  color: #4a4540;
+  letter-spacing: 0.03em;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.home-label {
+  position: absolute;
+  font-family: Kavivanar, cursive;
+  font-size: 1.4rem;
+  color: #b8ad9e;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  transform-origin: center center;
+}
+
+.home-label__emoji-link {
+  pointer-events: auto;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.home-label--small {
+  font-size: 0.8rem;
+  max-width: 26rem;
+  white-space: normal;
+  line-height: 1.5;
+  text-align: right;
+}
+
+/* spread labels around the page */
+.home-label--about {
+  top: 38%;
+  left: 8%;
+}
+
+.home-label--projects {
+  top: 30%;
+  left: 50%;
+  translate: calc(-50% - 8px) 0;
+}
+
+.home-label--blog {
+  top: 38%;
+  right: 8%;
+}
+
+.home-label--socials {
+  top: 62%;
+  left: 50%;
+  translate: calc(-50% - 8px) 0;
+}
+
+.home-label--title {
+  bottom: 22%;
+  right: 6%;
+}
+
+/* full-screen SVG for arrows */
+.home-arrows-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.home-dev-note {
+  position: absolute;
+  left: 7%;
+  bottom: 16%;
+  max-width: 30rem;
+  margin: 0;
+  font-family: Kavivanar, cursive;
+  font-size: 1rem;
+  line-height: 1.55;
+  letter-spacing: 0.02em;
+  color: #b24a45;
+  white-space: normal;
+}
