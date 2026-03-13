@@ -162,6 +162,7 @@
   bottom: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 9999;
   background: #faf7f0;
   border: 2px solid #e5decf;
   padding: 0.75rem 1.25rem;
