@@ -57,7 +57,6 @@ function normalizePost(path, markdown) {
     date: metadata.date ?? '1970-01-01',
     dateObject: date,
     summary: metadata.summary ?? '',
-    tags: Array.isArray(metadata.tags) ? metadata.tags : [],
     featured: Boolean(metadata.featured),
     content,
   }
@@ -85,10 +84,6 @@ export function getNeighborPosts(slug) {
     previous: allPosts[index + 1] ?? null,
     next: allPosts[index - 1] ?? null,
   }
-}
-
-export function getAllTags() {
-  return [...new Set(allPosts.flatMap(post => post.tags))].sort((a, b) => a.localeCompare(b))
 }
 
 export function formatPostDate(dateString) {

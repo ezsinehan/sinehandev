@@ -20,11 +20,6 @@ export default function BlogPost() {
           <p className="blog-post__meta">{formatPostDate(post.date)}</p>
           <h1 className="blog-post__title">{post.title}</h1>
           <p className="blog-post__summary">{post.summary}</p>
-          <div className="blog-entry__tags" aria-label="Post tags">
-            {post.tags.map(tag => (
-              <span key={tag} className="blog-entry__tag">{tag}</span>
-            ))}
-          </div>
         </header>
 
         <section className="blog-markdown">

@@ -1,71 +1,41 @@
 # CODEX.md
 
-Session update log for work done on 2026-03-06.
+Session update log for work done on 2026-03-13.
 
 ## High-level outcome
-The site remains in the same visual language (Kavivanar + muted palette + pixel icons), with temporary WIP affordances added for unfinished areas and quality-of-life UI tweaks.
+Reviewed the blog implementation against current repository behavior, validated build/lint status, and refreshed agent handoff docs (`CODEX.md`, `CLAUDE.md`) so future work reflects the current live architecture instead of the older renovation-placeholder state.
 
-## Changes made this session
+## Current state review
 
-1. Repository/context review
-- Read and summarized repository state from `CLAUDE.md`.
-- Performed independent review and recorded findings in `CODEX_REVIEW.md`.
+### Blog feature status
+- `/blog` is now fully implemented as a post timeline/list, not an `UNDER RENOVATION` placeholder.
+- `/blog/:slug` is implemented as a markdown-rendered detail page with previous/next post links.
+- Blog content is sourced from local markdown files in `src/content/blog/*.md`.
+- Frontmatter parsing and ordering are handled in `src/lib/blog.js` via `import.meta.glob(..., { eager: true, query: '?raw' })`.
 
-2. Grid toggle iteration (top-left)
-- Replaced text grid toggle with pixel-art SVG icon.
-- Added active-state rotation (`45deg`) when grid is enabled.
-- Iterated box/icon sizing and positioning to match existing style.
-- Removed outer bounding box per request.
-- Final state: standalone icon-style toggle aligned at `top: 32px; left: 32px`, sized to match other icons.
+### Route/layout alignment
+- App routes include both `/blog` and `/blog/:slug`.
+- Breadcrumb logic in `Layout.jsx` correctly maps nested blog routes (`/blog/*`) to the `blog` section title.
+- `/projects` still uses the shared renovation placeholder component (`SectionPage`).
 
-3. Browser tab title behavior
-- Updated default title to `sinehan's website`.
-- Added visibility-based title swap:
-  - visible tab: `sinehan's website`
-  - hidden tab: `was it me😔`
+### Validation snapshot (this session)
+- `npm run lint` ✅ passes.
+- `npm run build` ✅ passes.
+- Vite still reports non-blocking JS chunk-size warning (>500 kB).
 
-4. About page copy adjustments
-- Kept title and contact section intact.
-- Replaced non-title/non-contact descriptive copy with `blah blah blah` placeholders.
-- Restored section titles (e.g., `currently`) after follow-up request.
+## Documentation updates made this session
 
-5. Projects/Blog WIP handling
-- Implemented shared `SectionPage` placeholder UI with caution-tape treatment and `UNDER RENOVATION` message.
-- Removed section label (`blog/projects`) and extra supporting sentence per follow-up.
-- Centering was refined and finalized with explicit absolute centering (`50%/50% + translate`).
-
-6. Home page additional note
-- Added red dev-note text in the lower-left quadrant:
-  - asks users to report bugs/tips via LinkedIn/email.
+1. Rewrote `CODEX.md` to replace older 2026-03-06 / 2026-03-07 logs that no longer represented the active blog implementation.
+2. Updated `CLAUDE.md` so architecture/routes/style notes match current code reality:
+   - blog list + detail pages are documented as active
+   - markdown/content pipeline is documented
+   - projects-only renovation status is clarified
+   - known issues updated to reflect current lint/build status
 
 ## Files touched in session
-- `src/components/Layout.jsx`
-- `src/App.css`
-- `src/App.jsx`
-- `index.html`
-- `src/pages/About.jsx`
-- `src/pages/SectionPage.jsx`
-- `src/pages/SectionPage.css` (new)
-- `src/pages/Home.jsx`
-- `src/pages/Home.css`
-- `CODEX_REVIEW.md` (new)
+- `CODEX.md`
+- `CLAUDE.md`
 
-## Validation notes
-- `npm run build` was run repeatedly after major UI edits and passed.
-- Build still emits Vite's chunk-size warning (>500kb), non-blocking.
-
----
-
-## Session update log for work done on 2026-03-07
-
-### Outcome
-Completed a discovery pass focused on blog-page implementation planning and documented architecture/UI recommendations.
-
-### Work completed
-1. Reviewed `CLAUDE.md` and current route/component structure for `/blog`.
-2. Audited relevant layout/style files to capture constraints from the shared shell.
-3. Authored `devnotes/blog-page-design-research.md` with:
-   - current-state summary
-   - architecture options (local array vs markdown vs CMS)
-   - visual direction options
-   - phased MVP recommendation
+## Recommended next steps
+- Add optional blog filtering by tag using `getAllTags()` already available in `src/lib/blog.js`.
+- Consider code-splitting markdown/detail route if bundle size should be reduced.
