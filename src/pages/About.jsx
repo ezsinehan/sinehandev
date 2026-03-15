@@ -132,6 +132,11 @@ export default function About() {
             personal project. the goal is to explore engine physics while deepening my
             understanding of Rust through building the model from scratch.
           </p>
+          <hr className="about-divider" />
+          <p className="about-text">
+            optimizing this site for mobile. layout, spacing, and interactions are being
+            refined so the experience holds up across screen sizes.
+          </p>
         </section>
 
         <section id="experience" className="about-section">
