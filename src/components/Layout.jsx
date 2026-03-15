@@ -160,7 +160,11 @@ export default function Layout({ children }) {
               back
             </Link>
           ) : (
-            <Link to="/" className="home-button" aria-label="Back to home">
+            <Link
+              to="/"
+              className={`home-button${location.pathname === '/projects' && scrolled ? ' home-button--frosted' : ''}`}
+              aria-label="Back to home"
+            >
               home
             </Link>
           )}
