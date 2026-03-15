@@ -66,8 +66,16 @@
   color: #c9c0b2;
   text-decoration: none;
   letter-spacing: 0.03em;
-  transition: color 0.2s;
+  transition: color 0.2s, background 0.2s, padding 0.2s;
   z-index: 100;
+}
+
+.home-button--frosted {
+  color: #6b6359;
+  background: rgba(250, 247, 240, 0.85);
+  padding: 0.25rem 0.6rem;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 .home-button:hover {

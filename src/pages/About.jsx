@@ -5,7 +5,31 @@ import "./About.css";
 const SECTIONS = [
   { id: "intro", label: "intro" },
   { id: "currently", label: "currently" },
+  { id: "experience", label: "experience" },
   { id: "contact", label: "contact" },
+];
+
+const EXPERIENCE = [
+  {
+    role: "AI Engineering Intern",
+    company: "OMRON Robotics",
+    type: "Internship",
+    period: "Aug 2025 – Dec 2025",
+    duration: "5 mos",
+    location: "Pleasanton, CA · Remote",
+    description: "developed internal tooling, data workflows, and system-level engineering tasks",
+    logo: "/omron-logo.png",
+  },
+  {
+    role: "Software Engineering Intern",
+    company: "Milano Technical Group",
+    type: "Internship",
+    period: "Jun 2025 – Aug 2025",
+    duration: "3 mos",
+    location: "Merced, CA · On-site",
+    description: "automated motion control, optimized workflows, supported integration and assembly",
+    logo: "/milano-logo.png",
+  },
 ];
 
 export default function About() {
@@ -85,13 +109,51 @@ export default function About() {
           <h1 className="about-heading">
             if you didn't know already i'm sinehan
           </h1>
-          <p className="about-text">blah blah blah</p>
-          <p className="about-text">blah blah blah</p>
+          <p className="about-text">
+            engineer with a software focus. bs in computer science & engineering.
+            passionate about performance & results.
+          </p>
+          {/* TODO: expand this section — currently pulled from LinkedIn bio, needs work */}
+          <p className="about-text" style={{ color: '#c9c0b2', fontSize: '0.8rem' }}>
+            — via linkedin
+          </p>
         </section>
 
         <section id="currently" className="about-section">
           <h2 className="about-subheading">currently</h2>
-          <p className="about-text">blah blah blah</p>
+          <p className="about-text">
+            currently building Sinehan LLM, a RAG-based system that indexes my experience and
+            projects so visitors can ask questions about my background. the model is being
+            developed to run on my local GPU and power an interactive assistant on this site.
+          </p>
+          <hr className="about-divider" />
+          <p className="about-text">
+            also experimenting with a Rust-based internal combustion engine simulation as a
+            personal project. the goal is to explore engine physics while deepening my
+            understanding of Rust through building the model from scratch.
+          </p>
+        </section>
+
+        <section id="experience" className="about-section">
+          <h2 className="about-subheading">experience</h2>
+          <ul className="exp-list">
+            {EXPERIENCE.map((job) => (
+              <li key={job.role + job.company} className="exp-entry">
+                <div className="exp-header">
+                  {job.logo && (
+                    <img src={job.logo} alt={job.company} className="exp-logo" />
+                  )}
+                  <div className="exp-header__text">
+                    <div className="exp-role">{job.role}</div>
+                    <div className="exp-meta">{job.company} · {job.type}</div>
+                    <div className="exp-meta">{job.period} · {job.duration}</div>
+                    <div className="exp-meta exp-meta--location">{job.location}</div>
+                  </div>
+                </div>
+                <p className="exp-description">{job.description}</p>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section id="contact" className="about-section">

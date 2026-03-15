@@ -40,7 +40,7 @@
 }
 
 .about-page {
-  max-width: 38rem;
+  max-width: 32rem;
   margin: 0 auto;
   padding: 1rem 1.5rem 8rem;
 }
@@ -61,6 +61,12 @@
   letter-spacing: 0.03em;
   line-height: 1.7;
   margin: 0 0 1.25rem;
+}
+
+.about-divider {
+  border: none;
+  border-top: 1px solid #e5decf;
+  margin: 1.25rem 0;
 }
 
 .about-section {
@@ -93,6 +99,86 @@
   padding: 0.35rem 0.75rem;
   border: 1px solid #e5decf;
   background: #faf7f0;
+}
+
+.exp-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.exp-entry {
+  padding: 1.25rem 0 1.25rem 1.25rem;
+  border-left: 1px solid #e5decf;
+  position: relative;
+}
+
+.exp-entry::before {
+  content: "";
+  position: absolute;
+  left: -3px;
+  top: 1.6rem;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #c9c0b2;
+}
+
+.exp-entry + .exp-entry {
+  margin-top: 0.25rem;
+}
+
+.exp-role {
+  font-family: Kavivanar, cursive;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #4a4540;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.2rem;
+}
+
+.exp-meta {
+  font-family: Kavivanar, cursive;
+  font-size: 0.82rem;
+  color: #c9c0b2;
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+}
+
+.exp-meta--location {
+  margin-bottom: 0.75rem;
+}
+
+.exp-description {
+  font-family: Kavivanar, cursive;
+  font-size: 0.9rem;
+  color: #6b6359;
+  letter-spacing: 0.02em;
+  line-height: 1.65;
+  margin: 0 0 0.75rem;
+}
+
+.exp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.65rem;
+}
+
+.exp-header__text {
+  flex: 1;
+}
+
+.exp-logo {
+  width: 2.75rem;
+  height: 2.75rem;
+  object-fit: contain;
+  border-radius: 6px;
+  flex-shrink: 0;
 }
 
 .about-contact-list {
