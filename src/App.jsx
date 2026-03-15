@@ -9,8 +9,17 @@ import Projects from './pages/Projects'
 import ProjectDetail from './pages/ProjectDetail'
 import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
+import { PROJECTS } from './data/projects'
 
 function App() {
+  useEffect(() => {
+    PROJECTS.forEach(({ image }) => {
+      if (!image) return
+      const img = new Image()
+      img.src = image
+    })
+  }, [])
+
   useEffect(() => {
     const activeTitle = "sinehan's website"
     const awayTitle = 'was it me😔'
