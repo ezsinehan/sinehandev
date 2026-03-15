@@ -25,10 +25,13 @@ All pages are wrapped in a shared `Layout` that renders persistent UI:
 - **Debug grid toggle** (top-left) — pixel-art icon button at `top: 32px; left: 32px`; toggles a 32px red alignment overlay (`.debug-grid`)
 - **Nav / breadcrumb** (top-center, fixed at `top: 4rem`, optically centered with `translateX(calc(-50% - 8px))`):
   - On `/`: three tab links with IDs `nav-about`, `nav-projects`, `nav-blog` (used by Home annotations)
+  - On section pages: "sinehan's [title]" fades out on scroll (`scrollY > 50`)
+  - On `/projects/:id`: breadcrumb shows "sinehan's projects"; back button shows "back" → `/projects`
+  - On all other non-home pages: "home" button appears at `left: 5rem, top: 4rem` → `/`
   - On section pages: "sinehan's [title]" fades out on scroll (`scrollY > 50`), and a fixed `home` button appears at `left: 5rem, top: 4rem`
   - `/blog/:slug` still maps breadcrumb label to `blog`
   - Transitions use Framer Motion (`AnimatePresence mode="wait"`, fade + slide)
-- **Social icons box** (`id="social-bar"`, bottom-center): GitHub, email copy-to-clipboard, LinkedIn, resume PDF
+- **Social icons box** (`id="social-bar"`, bottom-center, `z-index: 9999`): GitHub, email copy-to-clipboard, LinkedIn, resume PDF
 - **Email toast** — appears above the social box with Motion animation
 
 ### Routes
@@ -37,8 +40,42 @@ All pages are wrapped in a shared `Layout` that renders persistent UI:
   - Typewriter hero text + arrow annotations
   - Extra red dev note in lower-left quadrant (`.home-dev-note`) asking users to report bugs/tips via LinkedIn/email
 - `/about` — `src/pages/About.jsx` + `src/pages/About.css`
-  - TOC sections remain: intro / currently / contact
+  - TOC sections: intro / currently / contact
   - Main body copy currently simplified to placeholder `blah blah blah` except title/contact content
+- `/projects` — `src/pages/Projects.jsx` + `src/pages/Projects.css`
+  - 2-column responsive grid (1-column on mobile ≤900px); no swipe mode
+  - Each tile shows project image + title; clicking navigates based on data:
+    - If `project.link` is set → opens that URL directly in a new tab (external redirect)
+    - If no `project.link` → navigates to `/projects/:id` detail page
+  - Project data imported from `src/data/projects.js`
+  - Tile overlay uses a plain CSS gradient (no `backdrop-filter` — removed for performance)
+- `/projects/:id` — `src/pages/ProjectDetail.jsx` (shares `About.css`)
+  - Mirrors About layout: fixed left TOC + centered scrollable content
+  - Sections are fully dynamic — defined per-project in `src/data/projects.js`
+  - Scrolls to top on mount; redirects to `/projects` if `id` not found
+- `/blog` — `src/pages/Blog.jsx` (wrapper around `SectionPage` with title "blog")
+  - Shows centered "UNDER RENOVATION" panel with caution-tape styling (`src/pages/SectionPage.css`)
+- `/chat` — `src/pages/Chat.jsx`: RAG chat UI posting to `{VITE_API_URL}/answer`
+
+### Project Data (`src/data/projects.js`)
+
+Single source of truth for all projects. Each entry shape:
+
+```js
+{
+  id: 'slug',           // used in URL: /projects/slug
+  title: 'My Project',
+  image: '/image.png',  // public/ folder: use '/filename.png'; src/assets/: use import
+  link: 'https://...',  // optional — if set, tile links directly here (no detail page)
+  sections: [           // used by detail page; omit if link is set
+    { id: 'overview', label: 'overview', body: 'text...' },
+    { id: 'links', label: 'links', links: [{ label: 'github', href: '...' }] },
+    // add any number of sections in any order
+  ],
+}
+```
+
+Section types: `body` (renders a `<p>`) and/or `links` (renders a `<ul>` of `<a>` tags). Both can coexist in one section.
 - `/projects` — wrapper around `src/pages/SectionPage.jsx`
   - Shows centered "UNDER RENOVATION" card (`src/pages/SectionPage.css`)
 - `/blog` — `src/pages/Blog.jsx` + `src/pages/Blog.css`
@@ -64,6 +101,9 @@ All pages are wrapped in a shared `Layout` that renders persistent UI:
 
 - `src/App.css` — shared nav/breadcrumb/socials/toast/debug-grid styles
 - `src/pages/Home.css` — home title, annotation labels/arrows, and dev note
+- `src/pages/About.css` — about layout + TOC + copy/contact styles; also used by `ProjectDetail`
+- `src/pages/Projects.css` — grid layout, tile styles, gradient overlay, responsive breakpoints
+- `src/pages/SectionPage.css` — renovation card and tape styling (blog only)
 - `src/pages/About.css` — about layout + TOC + copy/contact styles
 - `src/pages/SectionPage.css` — renovation card and tape styling (projects route)
 - `src/pages/Blog.css` — blog list + detail styles

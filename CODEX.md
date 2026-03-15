@@ -1,5 +1,57 @@
 # CODEX.md
 
+Session update log.
+
+---
+
+## Session 2026-03-14
+
+### High-level outcome
+Projects page fully implemented with a 2-column grid, per-project detail pages with dynamic sections, and external link redirect support. Various performance and layout bug fixes.
+
+### Changes made
+
+1. **Projects page (`/projects`)**
+   - Replaced `SectionPage` "UNDER RENOVATION" stub with a real 2-column grid
+   - Swipe/slideshow mode was built and then removed due to animation complexity
+   - Tile overlay switched from `backdrop-filter` to plain CSS gradient for performance
+   - Title font size and grid gap tuned iteratively
+
+2. **Project detail page (`/projects/:id`)**
+   - Created `ProjectDetail.jsx` sharing `About.css` layout (fixed TOC + centered content)
+   - Sections are fully dynamic — defined in `src/data/projects.js` per project
+   - Scrolls to top on mount to prevent mid-page entry on long projects
+   - Layout "back" button navigates to `/projects` on detail pages (instead of "home" → `/`)
+
+3. **Project data (`src/data/projects.js`)**
+   - Single source of truth for all project content
+   - Supports two tile behaviors: `link` field → external redirect; no `link` → detail page
+   - Section types: `body` (paragraph) and `links` (list of anchors)
+   - Real projects populated: Anchor, Sinehan LLM, Full-Stack Course Enrollment, TUI L-Game AI, Ai's Two Cents, Studybox, Autonomous Kinova Leaf Grasping System
+
+4. **Layout fixes**
+   - Social bar (`#social-bar`) given `z-index: 9999` so it always renders above page content
+   - "back" vs "home" button logic added for project detail routes
+
+5. **Bug fixes**
+   - Project tile titles were rendering below the tile boundary — fixed by switching `.project-tile__overlay-content` from `height: 100%; justify-content: flex-end` to `position: absolute; bottom: 0`
+   - Removed `backdrop-filter` from grid tiles to fix first-load lag
+
+### Files touched
+- `src/pages/Projects.jsx` (rewritten)
+- `src/pages/Projects.css` (rewritten)
+- `src/pages/ProjectDetail.jsx` (new)
+- `src/data/projects.js` (new)
+- `src/components/Layout.jsx`
+- `src/App.jsx`
+- `src/App.css`
+
+### Validation
+- `npm run build` passes. Vite chunk-size warning (>500kb) persists, non-blocking.
+
+---
+
+## Session 2026-03-06
 Session update log for work done on 2026-03-13.
 
 ## High-level outcome

@@ -24,9 +24,11 @@ export default function Layout({ children }) {
 
   const [scrolled, setScrolled] = useState(false)
   const isHome = location.pathname === '/'
-  const sectionTitle = location.pathname.startsWith('/blog/')
-    ? 'blog'
-    : SECTION_TITLES[location.pathname]
+  
+  const sectionTitle =
+    SECTION_TITLES[location.pathname] ??
+    (location.pathname.startsWith('/projects/') ? 'projects' : undefined) ??
+    (location.pathname.startsWith('/blog/') ? 'blog' : undefined)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50)
@@ -153,9 +155,15 @@ export default function Layout({ children }) {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.35, delay: 0.5 }}
         >
-          <Link to="/" className="home-button" aria-label="Back to home">
-            home
-          </Link>
+          {location.pathname.startsWith('/projects/') ? (
+            <Link to="/projects" className="home-button" aria-label="Back to projects">
+              back
+            </Link>
+          ) : (
+            <Link to="/" className="home-button" aria-label="Back to home">
+              home
+            </Link>
+          )}
         </Motion.div>
       )}
 
