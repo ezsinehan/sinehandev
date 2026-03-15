@@ -4,26 +4,23 @@ import { motion as Motion } from 'motion/react'
 import { PROJECTS } from '../data/projects'
 import './About.css'
 
-const SECTIONS = [
-  { id: 'overview', label: 'overview' },
-  { id: 'stack', label: 'stack' },
-  { id: 'links', label: 'links' },
-]
-
 export default function ProjectDetail() {
   const { id } = useParams()
   const project = PROJECTS.find((p) => p.id === id)
 
-  const [activeId, setActiveId] = useState('overview')
+  useEffect(() => { window.scrollTo(0, 0) }, [])
+
+  const [activeId, setActiveId] = useState(project?.sections[0]?.id ?? '')
   const [isAutoScrolling, setIsAutoScrolling] = useState(false)
   const scrollTimerRef = useRef(null)
 
   useEffect(() => {
+    if (!project) return
     const onScroll = () => {
       if (isAutoScrolling) return
-      let closest = SECTIONS[0].id
+      let closest = project.sections[0].id
       let closestDist = Infinity
-      for (const { id: sId } of SECTIONS) {
+      for (const { id: sId } of project.sections) {
         const el = document.getElementById(sId)
         if (!el) continue
         const dist = Math.abs(el.getBoundingClientRect().top - 200)
@@ -34,15 +31,12 @@ export default function ProjectDetail() {
       }
       setActiveId(closest)
     }
-
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  }, [isAutoScrolling])
+  }, [isAutoScrolling, project])
 
   useEffect(() => {
-    return () => {
-      if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current)
-    }
+    return () => { if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current) }
   }, [])
 
   const scrollTo = (sId) => {
@@ -51,8 +45,7 @@ export default function ProjectDetail() {
     setActiveId(sId)
     setIsAutoScrolling(true)
     if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current)
-    const top = el.getBoundingClientRect().top + window.scrollY - 200
-    window.scrollTo({ top, behavior: 'smooth' })
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 200, behavior: 'smooth' })
     scrollTimerRef.current = setTimeout(() => {
       setIsAutoScrolling(false)
       scrollTimerRef.current = null
@@ -64,7 +57,7 @@ export default function ProjectDetail() {
   return (
     <div className="about-layout">
       <nav className="about-toc" aria-label="Project sections">
-        {SECTIONS.map(({ id: sId, label }, i) => (
+        {project.sections.map(({ id: sId, label }, i) => (
           <Motion.button
             key={sId}
             className={`about-toc__item${activeId === sId ? ' about-toc__item--active' : ''}`}
@@ -84,40 +77,27 @@ export default function ProjectDetail() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, delay: 0.1 }}
       >
-        <section id="overview">
-          <h1 className="about-heading">{project.title}</h1>
-          <p className="about-text">{project.overview}</p>
-        </section>
+        <h1 className="about-heading">{project.title}</h1>
 
-        <section id="stack" className="about-section">
-          <h2 className="about-subheading">stack</h2>
-          {project.stack.length > 0 ? (
-            <ul className="about-list">
-              {project.stack.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          ) : (
-            <p className="about-text">blah blah blah</p>
-          )}
-        </section>
-
-        <section id="links" className="about-section">
-          <h2 className="about-subheading">links</h2>
-          {project.links.length > 0 ? (
-            <ul className="about-contact-list">
-              {project.links.map(({ label, href }) => (
-                <li key={href}>
-                  <a href={href} target="_blank" rel="noopener noreferrer">
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="about-text">blah blah blah</p>
-          )}
-        </section>
+        {project.sections.map((section, i) => (
+          <section
+            key={section.id}
+            id={section.id}
+            className={i === 0 ? undefined : 'about-section'}
+          >
+            <h2 className="about-subheading">{section.label}</h2>
+            {section.body && <p className="about-text">{section.body}</p>}
+            {section.links && (
+              <ul className="about-contact-list">
+                {section.links.map(({ label, href }) => (
+                  <li key={href}>
+                    <a href={href} target="_blank" rel="noopener noreferrer">{label}</a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        ))}
       </Motion.div>
     </div>
   )

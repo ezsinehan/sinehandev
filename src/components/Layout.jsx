@@ -153,9 +153,15 @@ export default function Layout({ children }) {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.35, delay: 0.5 }}
         >
-          <Link to="/" className="home-button" aria-label="Back to home">
-            home
-          </Link>
+          {location.pathname.startsWith('/projects/') ? (
+            <Link to="/projects" className="home-button" aria-label="Back to projects">
+              back
+            </Link>
+          ) : (
+            <Link to="/" className="home-button" aria-label="Back to home">
+              home
+            </Link>
+          )}
         </Motion.div>
       )}
 
