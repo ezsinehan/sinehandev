@@ -8,6 +8,7 @@ import About from './pages/About'
 import Projects from './pages/Projects'
 import ProjectDetail from './pages/ProjectDetail'
 import Blog from './pages/Blog'
+import BlogPost from './pages/BlogPost'
 
 function App() {
   useEffect(() => {
@@ -32,6 +33,7 @@ function App() {
         <Route path="/projects" element={<Projects />} />
         <Route path="/projects/:id" element={<ProjectDetail />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
       </Routes>
     </Layout>
   )
