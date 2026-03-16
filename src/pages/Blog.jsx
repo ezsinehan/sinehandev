@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { motion as Motion } from "motion/react";
 import { getAllPosts, formatPostDate } from "../lib/blog";
 import "./Blog.css";
 
@@ -7,8 +8,14 @@ export default function Blog() {
   return (
     <main className="blog-page" aria-label="Blog page">
       <section className="blog-timeline" aria-label="Post timeline">
-        {posts.map((post) => (
-          <article className="blog-entry" key={post.slug}>
+        {posts.map((post, i) => (
+          <Motion.article
+            className="blog-entry"
+            key={post.slug}
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: i * 0.08 }}
+          >
             <div
               className="blog-entry__date-rail"
               aria-label={`Published ${formatPostDate(post.date)}`}
@@ -23,7 +30,7 @@ export default function Blog() {
               </h2>
               <p className="blog-entry__summary">{post.summary}</p>
             </div>
-          </article>
+          </Motion.article>
         ))}
       </section>
     </main>

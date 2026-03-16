@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { motion as Motion } from 'motion/react'
 import './Projects.css'
 import { PROJECTS } from '../data/projects'
 
@@ -23,21 +24,31 @@ export default function Projects() {
   return (
     <main className="projects-page" aria-label="Projects list">
       <section className="projects-grid">
-        {PROJECTS.map((project) =>
+        {PROJECTS.map((project, i) =>
           project.link ? (
-            <a
+            <Motion.a
               key={project.id}
               href={project.link}
               target="_blank"
               rel="noopener noreferrer"
               className="project-tile"
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: i * 0.08 }}
             >
               <TileInner project={project} />
-            </a>
+            </Motion.a>
           ) : (
-            <Link key={project.id} to={`/projects/${project.id}`} className="project-tile">
-              <TileInner project={project} />
-            </Link>
+            <Motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: i * 0.08 }}
+            >
+              <Link to={`/projects/${project.id}`} className="project-tile">
+                <TileInner project={project} />
+              </Link>
+            </Motion.div>
           )
         )}
       </section>
