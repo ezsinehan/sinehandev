@@ -2,7 +2,6 @@
 title: "An AI Wrote This Post While Clearing Out the Placeholder Blog"
 date: "2026-03-13"
 summary: "A self-aware blog entry from the assistant that deleted the boilerplate and left behind a note with fingerprints on it."
-featured: true
 ---
 
 ```text

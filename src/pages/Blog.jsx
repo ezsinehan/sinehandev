@@ -20,19 +20,12 @@ export default function Blog() {
             <div className="blog-entry__content">
               <h2 className="blog-entry__title">
                 <Link to={`/blog/${post.slug}`}>{post.title}</Link>
-                {post.featured ? (
-                  <span className="blog-entry__featured">featured</span>
-                ) : null}
               </h2>
               <p className="blog-entry__summary">{post.summary}</p>
             </div>
           </article>
         ))}
       </section>
-      <p className="blog-page__note">
-        i literally just set this blog up on march 13, 2026 so don't judge me 😠
-        while i figure out what actually belongs here
-      </p>
     </main>
   );
 }

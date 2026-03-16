@@ -33,17 +33,6 @@ const ANNOTATIONS = [
     rotation: -2,
     anchorX: "center",
   },
-  {
-    key: "title",
-    targetId: "home-title",
-    label:
-      "the typewriter is a homage to my portfolio v1, i don't even like it anymore and hopefully you never see it ",
-    emojiLink: { emoji: "😉", href: "https://legacy.sinehan.dev" },
-    rotation: 2,
-    anchorXOffset: 180,
-    approachFrom: "southeast",
-    small: true,
-  },
 ];
 
 function arrowhead(tx, ty, cpx, cpy) {
@@ -206,11 +195,11 @@ export default function Home() {
         ))}
       </svg>
 
-      {ANNOTATIONS.map(({ key, label, rotation, small, emojiLink }, i) => (
+      {ANNOTATIONS.map(({ key, label, rotation, emojiLink }, i) => (
         <Motion.span
           key={key}
           ref={(el) => (labelRefs.current[key] = el)}
-          className={`home-label home-label--${key}${small ? " home-label--small" : ""}`}
+          className={`home-label home-label--${key}`}
           style={{ transform: `rotate(${rotation}deg)` }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -229,17 +218,6 @@ export default function Home() {
           )}
         </Motion.span>
       ))}
-
-      <Motion.p
-        className="home-dev-note"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.45, delay: 1.15 }}
-      >
-        you will probably quickly realize this website still in progress, please
-        please please text me on linkedin or email or whatever if you have tips
-        or see bugs
-      </Motion.p>
     </div>
   );
 }

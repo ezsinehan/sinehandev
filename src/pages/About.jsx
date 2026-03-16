@@ -110,7 +110,7 @@ export default function About() {
             if you didn't know already i'm sinehan
           </h1>
           <p className="about-text">
-            engineer with a software focus. bs in computer science & engineering.
+            engineer with a software focus. bsc in computer science & engineering.
             passionate about performance & results.
           </p>
           {/* TODO: expand this section — currently pulled from LinkedIn bio, needs work */}

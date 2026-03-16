@@ -37,13 +37,6 @@
   cursor: pointer;
 }
 
-.home-label--small {
-  font-size: 0.8rem;
-  max-width: 26rem;
-  white-space: normal;
-  line-height: 1.5;
-  text-align: right;
-}
 
 /* spread labels around the page */
 .home-label--about {
@@ -68,10 +61,6 @@
   translate: calc(-50% - 8px) 0;
 }
 
-.home-label--title {
-  bottom: 22%;
-  right: 6%;
-}
 
 /* full-screen SVG for arrows */
 .home-arrows-svg {
@@ -82,16 +71,3 @@
   overflow: visible;
 }
 
-.home-dev-note {
-  position: absolute;
-  left: 7%;
-  bottom: 16%;
-  max-width: 30rem;
-  margin: 0;
-  font-family: Kavivanar, cursive;
-  font-size: 1rem;
-  line-height: 1.55;
-  letter-spacing: 0.02em;
-  color: #b24a45;
-  white-space: normal;
-}

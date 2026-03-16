@@ -5,7 +5,7 @@ const rawPosts = import.meta.glob('../content/blog/*.md', {
 })
 
 function parseFrontmatter(markdown) {
-  const match = markdown.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/)
+  const match = markdown.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/)
   if (!match) {
     return { metadata: {}, content: markdown.trim() }
   }
@@ -57,7 +57,6 @@ function normalizePost(path, markdown) {
     date: metadata.date ?? '1970-01-01',
     dateObject: date,
     summary: metadata.summary ?? '',
-    featured: Boolean(metadata.featured),
     content,
   }
 }
