@@ -3,7 +3,8 @@
     "allow": [
       "WebFetch(domain:github.com)",
       "Bash(uv:*)",
-      "mcp__chrome-devtools__connect_to_browser"
+      "mcp__chrome-devtools__connect_to_browser",
+      "Bash(npm run:*)"
     ]
   }
 }

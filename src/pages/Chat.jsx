@@ -1,142 +1,102 @@
 import { useState, useRef, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import ReactMarkdown from 'react-markdown'
-import '../App.css'
 import './Chat.css'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
-async function askRag(question) {
-  const res = await fetch(`${API_URL}/answer`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ question, top_k: 5 }),
-  })
-  if (!res.ok) {
-    const text = await res.text()
-    throw new Error(text || res.statusText)
-  }
-  return res.json()
-}
-
 export default function Chat() {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const messagesEndRef = useRef(null)
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
+  const [loading, setLoading] = useState(false)
+  const [info, setInfo] = useState(null)
+  const bottomRef = useRef(null)
 
   useEffect(() => {
-    scrollToBottom()
+    fetch(`${API_URL}/info`)
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => setInfo(data))
+      .catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  const handleSubmit = async (e) => {
+  const send = async (e) => {
     e.preventDefault()
     const text = input.trim()
-    if (!text || isLoading) return
+    if (!text || loading) return
 
-    const userMessage = { role: 'user', content: text }
-    setMessages((prev) => [...prev, userMessage])
+    setMessages((prev) => [...prev, { role: 'user', content: text }])
     setInput('')
-    setIsLoading(true)
+    setLoading(true)
 
     try {
-      const { answer, citations = [] } = await askRag(text)
-      const content = answer != null ? String(answer) : ''
-      setMessages((prev) => [...prev, { role: 'assistant', content, citations }])
+      const res = await fetch(`${API_URL}/answer`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: text, top_k: 5 }),
+      })
+      if (!res.ok) throw new Error(await res.text() || res.statusText)
+      const { answer } = await res.json()
+      setMessages((prev) => [...prev, { role: 'assistant', content: String(answer ?? '') }])
     } catch (err) {
-      const message = err.message || 'something went wrong. please try again.'
-      setMessages((prev) => [
-        ...prev,
-        { role: 'assistant', content: `something went wrong. please try again. (${message})`, citations: [] }
-      ])
+      setMessages((prev) => [...prev, { role: 'assistant', content: `error: ${err.message}` }])
     } finally {
-      setIsLoading(false)
+      setLoading(false)
     }
   }
 
   return (
-    <div className="chat-page">
-      <header className="chat-header">
-        <Link to="/" className="chat-back" aria-label="Back to home">
-          ← back
-        </Link>
-        <h1 className="chat-title">chat(abt sinehan's experience(just about sinehan rag llm for now))</h1>
-      </header>
-
-      <div className="chat-messages" role="log" aria-live="polite">
+    <div className="chat-layout">
+      <div className="chat-page">
+      <div className="chat-messages">
         {messages.length === 0 && (
-          <p className="chat-placeholder">
-            ask anything about my background, projects, or experience.
-          </p>
+          <p className="chat-empty">ask me anything</p>
         )}
         {messages.map((msg, i) => (
-          <div
-            key={i}
-            className={`chat-message chat-message--${msg.role}`}
-            role="listitem"
-          >
-            <div className="chat-message__content">
-              {msg.role === 'assistant' ? (
-                <ReactMarkdown>{msg.content != null ? String(msg.content) : ''}</ReactMarkdown>
-              ) : (
-                msg.content != null ? String(msg.content) : ''
-              )}
-            </div>
-            {msg.role === 'assistant' && msg.citations?.length > 0 && (
-              <ul className="chat-citations" aria-label="Sources">
-                {msg.citations.map((c, j) => (
-                  <li key={j}>
-                    {c.section_title} ({c.source_name})
-                    {c.url && (
-                      <a href={c.url} target="_blank" rel="noopener noreferrer" className="chat-citations__link">
-                        link
-                      </a>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
+          <div key={i} className={`chat-msg chat-msg--${msg.role}`}>
+            {msg.content}
           </div>
         ))}
-        {isLoading && (
-          <div className="chat-message chat-message--assistant" aria-busy="true">
-            <div className="chat-message__content chat-typing">...</div>
-          </div>
-        )}
-        <div ref={messagesEndRef} aria-hidden="true" />
+        {loading && <div className="chat-msg chat-msg--assistant">...</div>}
+        <div ref={bottomRef} />
       </div>
-
-      <form className="chat-form" onSubmit={handleSubmit}>
-        <label htmlFor="chat-input" className="visually-hidden">
-          your question
-        </label>
+      <form className="chat-form" onSubmit={send}>
         <input
-          id="chat-input"
-          type="text"
           className="chat-input"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="ask me anything..."
-          disabled={isLoading}
-          autoComplete="off"
-          aria-describedby="chat-hint"
+          placeholder="type something..."
+          disabled={loading}
         />
-        <button
-          type="submit"
-          className="chat-send"
-          disabled={!input.trim() || isLoading}
-          aria-label="Send message"
-        >
+        <button className="chat-send" type="submit" disabled={!input.trim() || loading}>
           send
         </button>
       </form>
-      <p id="chat-hint" className="visually-hidden">
-        type a question and press send to get an answer about sinehan’s experience
-      </p>
+    </div>
+
+      {info && (
+        <div className="chat-info">
+          <div className="chat-info__section">
+            <h3 className="chat-info__heading">stack</h3>
+            <p>llm: {info.stack.llm_model}</p>
+            <p>embeddings: {info.stack.embedding_model}</p>
+            <p>vector db: {info.stack.vector_db}</p>
+          </div>
+          <div className="chat-info__section">
+            <h3 className="chat-info__heading">stats</h3>
+            <p>chunks: {info.stats.total_chunks}</p>
+            {info.stats.documents.map((doc) => (
+              <p key={doc.doc_id}>{doc.source_name} ({doc.chunk_count} chunks)</p>
+            ))}
+          </div>
+          <div className="chat-info__section">
+            <h3 className="chat-info__heading">health</h3>
+            <p>qdrant: {info.health.qdrant ? 'ok' : 'down'}</p>
+            <p>ollama: {info.health.ollama ? 'ok' : 'down'}</p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

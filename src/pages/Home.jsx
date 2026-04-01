@@ -27,6 +27,13 @@ const ANNOTATIONS = [
     anchorX: "right",
   },
   {
+    key: "chat",
+    targetId: "nav-chat",
+    label: "ask me anything",
+    rotation: 2,
+    anchorX: "right",
+  },
+  {
     key: "socials",
     targetId: "social-bar",
     label: "my socials!",

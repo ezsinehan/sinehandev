@@ -53,9 +53,10 @@ All pages are wrapped in a shared `Layout` that renders persistent UI:
   - Mirrors About layout: fixed left TOC + centered scrollable content
   - Sections are fully dynamic — defined per-project in `src/data/projects.js`
   - Scrolls to top on mount; redirects to `/projects` if `id` not found
-- `/blog` — `src/pages/Blog.jsx` (wrapper around `SectionPage` with title "blog")
-  - Shows centered "UNDER RENOVATION" panel with caution-tape styling (`src/pages/SectionPage.css`)
-- `/chat` — `src/pages/Chat.jsx`: RAG chat UI posting to `{VITE_API_URL}/answer`
+- `/blog` — `src/pages/Blog.jsx` + `src/pages/Blog.css`
+  - Timeline/list of posts with date rail, summary, tags, and optional `featured` badge
+- `/blog/:slug` — `src/pages/BlogPost.jsx` + shared `src/pages/Blog.css`
+  - Renders markdown post body and previous/next navigation
 
 ### Project Data (`src/data/projects.js`)
 
@@ -76,13 +77,6 @@ Single source of truth for all projects. Each entry shape:
 ```
 
 Section types: `body` (renders a `<p>`) and/or `links` (renders a `<ul>` of `<a>` tags). Both can coexist in one section.
-- `/projects` — wrapper around `src/pages/SectionPage.jsx`
-  - Shows centered "UNDER RENOVATION" card (`src/pages/SectionPage.css`)
-- `/blog` — `src/pages/Blog.jsx` + `src/pages/Blog.css`
-  - Timeline/list of posts with date rail, summary, tags, and optional `featured` badge
-- `/blog/:slug` — `src/pages/BlogPost.jsx` + shared `src/pages/Blog.css`
-  - Renders markdown post body and previous/next navigation
-- `/chat` — `src/pages/Chat.jsx`: RAG chat UI posting to `{VITE_API_URL}/answer`
 
 ### Blog content/data flow
 
@@ -103,11 +97,8 @@ Section types: `body` (renders a `<p>`) and/or `links` (renders a `<ul>` of `<a>
 - `src/pages/Home.css` — home title, annotation labels/arrows, and dev note
 - `src/pages/About.css` — about layout + TOC + copy/contact styles; also used by `ProjectDetail`
 - `src/pages/Projects.css` — grid layout, tile styles, gradient overlay, responsive breakpoints
-- `src/pages/SectionPage.css` — renovation card and tape styling (blog only)
-- `src/pages/About.css` — about layout + TOC + copy/contact styles
-- `src/pages/SectionPage.css` — renovation card and tape styling (projects route)
+- `src/pages/SectionPage.css` — renovation card and tape styling
 - `src/pages/Blog.css` — blog list + detail styles
-- `src/pages/Chat.css` — chat-specific styles
 - `src/index.css` — radial background + noise + vignette
 - Font: Kavivanar throughout
 - Icons: pixel-art SVG inlined in JSX (no icon library)
