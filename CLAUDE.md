@@ -22,13 +22,12 @@ Single-page React app (React 19, React Router v7, Vite) deployed on Netlify.
 ### Layout (`src/components/Layout.jsx`)
 
 All pages are wrapped in a shared `Layout` that renders persistent UI:
-- **Debug grid toggle** (top-left) — pixel-art icon button at `top: 32px; left: 32px`; toggles a 32px red alignment overlay (`.debug-grid`)
+- **Debug grid toggle** (top-left) — pixel-art icon button at `top: 32px; left: 32px`; toggles a 32px red alignment overlay (`.debug-grid`); hidden on mobile (≤900px)
 - **Nav / breadcrumb** (top-center, fixed at `top: 4rem`, optically centered with `translateX(calc(-50% - 8px))`):
-  - On `/`: three tab links with IDs `nav-about`, `nav-projects`, `nav-blog` (used by Home annotations)
-  - On section pages: "sinehan's [title]" fades out on scroll (`scrollY > 50`)
+  - On `/`: four tab links with IDs `nav-about`, `nav-projects`, `nav-blog`, `nav-chat` (used by Home annotations)
+  - On section pages: "sinehan's [title]" fades out on scroll (`scrollY > 50`); hidden on mobile (≤900px)
   - On `/projects/:id`: breadcrumb shows "sinehan's projects"; back button shows "back" → `/projects`
-  - On all other non-home pages: "home" button appears at `left: 5rem, top: 4rem` → `/`
-  - On section pages: "sinehan's [title]" fades out on scroll (`scrollY > 50`), and a fixed `home` button appears at `left: 5rem, top: 4rem`
+  - On all other non-home pages: "home" button appears at `left: 5rem, top: 4rem` → `/`; on mobile centers to top-middle
   - `/blog/:slug` still maps breadcrumb label to `blog`
   - Transitions use Framer Motion (`AnimatePresence mode="wait"`, fade + slide)
 - **Social icons box** (`id="social-bar"`, bottom-center, `z-index: 9999`): GitHub, email copy-to-clipboard, LinkedIn, resume PDF
@@ -37,10 +36,12 @@ All pages are wrapped in a shared `Layout` that renders persistent UI:
 ### Routes
 
 - `/` — `src/pages/Home.jsx` + `src/pages/Home.css`
-  - Typewriter hero text + arrow annotations
+  - Typewriter hero text (responsive via `clamp()`, wraps on small screens) + arrow annotations
+  - Annotations use explicit `from`/`to`/`bow` arrow config per item (no auto-calculation)
+  - Arrows and labels hidden on viewports <1500px wide or <700px tall
   - Extra red dev note in lower-left quadrant (`.home-dev-note`) asking users to report bugs/tips via LinkedIn/email
 - `/about` — `src/pages/About.jsx` + `src/pages/About.css`
-  - TOC sections: intro / currently / contact
+  - TOC sections: intro / currently / contact; TOC hidden on mobile (≤900px)
   - Main body copy currently simplified to placeholder `blah blah blah` except title/contact content
 - `/projects` — `src/pages/Projects.jsx` + `src/pages/Projects.css`
   - 2-column responsive grid (1-column on mobile ≤900px); no swipe mode
@@ -57,6 +58,15 @@ All pages are wrapped in a shared `Layout` that renders persistent UI:
   - Timeline/list of posts with date rail, summary, tags, and optional `featured` badge
 - `/blog/:slug` — `src/pages/BlogPost.jsx` + shared `src/pages/Blog.css`
   - Renders markdown post body and previous/next navigation
+- `/chat` — `src/pages/Chat.jsx` + `src/pages/Chat.css`
+  - RAG chat interface with WIP banner
+  - Fetches `/info` (stack/stats/health) and `/prompts` on load with separate loading indicators
+  - If `/info` fails, chat is locked with offline message ("computer is off or tunnel is down")
+  - Sends questions to `POST /answer/stream` (SSE streaming) with fallback to `POST /answer` (JSON)
+  - Phased status messages during loading: embedding → searching → generating
+  - Streaming responses show tokens incrementally with blinking cursor
+  - Info panel (right side): stack details, stats, health, prompts with truncate/expand
+  - Mobile (≤900px): info panel hidden, chat goes fullscreen between nav and social bar
 
 ### Project Data (`src/data/projects.js`)
 
@@ -94,10 +104,11 @@ Section types: `body` (renders a `<p>`) and/or `links` (renders a `<ul>` of `<a>
 ### Styling
 
 - `src/App.css` — shared nav/breadcrumb/socials/toast/debug-grid styles
-- `src/pages/Home.css` — home title, annotation labels/arrows, and dev note
+- `src/pages/Home.css` — home title, annotation labels/arrows, dev note, responsive breakpoints
 - `src/pages/About.css` — about layout + TOC + copy/contact styles; also used by `ProjectDetail`
 - `src/pages/Projects.css` — grid layout, tile styles, gradient overlay, responsive breakpoints
 - `src/pages/SectionPage.css` — renovation card and tape styling
+- `src/pages/Chat.css` — chat layout, info panel, streaming/phase indicators, mobile fullscreen
 - `src/pages/Blog.css` — blog list + detail styles
 - `src/index.css` — radial background + noise + vignette
 - Font: Kavivanar throughout
@@ -119,7 +130,7 @@ Section types: `body` (renders a `<p>`) and/or `links` (renders a `<ul>` of `<a>
 
 ### Known Issues / Notes
 
-- `npm run lint` currently passes.
+- `npm run lint` has one pre-existing error: unused `placeholderImage` in `src/data/projects.js`.
 - Build succeeds, but Vite warns about chunk size > 500kb.
 - RAG backend is separate from this repo.
 
