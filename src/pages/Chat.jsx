@@ -240,6 +240,10 @@ export default function Chat() {
     </div>
 
       <div className="chat-info">
+        <p className="chat-info__note">
+          responses aren't great because i'm running a small model (it's all my personal gpu can handle). i could just use a high end model on the cloud but learning about llm optimization and quantization is a point of this project :)
+        </p>
+        <div className="chat-info__divider" />
         <div className="chat-info__status">
           <span className={`chat-info__dot chat-info__dot--${infoStatus}`} />
           {infoStatus === 'connecting' && 'fetching stack...'}
@@ -286,6 +290,7 @@ export default function Chat() {
             <p>temperature: {prompts.temperature}</p>
           </div>
         )}
+
       </div>
     </div>
   )
