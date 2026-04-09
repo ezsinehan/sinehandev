@@ -9,29 +9,45 @@ const ANNOTATIONS = [
     targetId: "nav-about",
     label: "sneak peak of me",
     rotation: -3,
-    anchorX: "center",
-    sourceAnchor: "right",
+    from: "right",   // arrow starts from right edge of label
+    to: "bottom",    // arrow points into bottom of nav item
+    bow: [200, 0],   // curve right
   },
   {
     key: "projects",
     targetId: "nav-projects",
     label: "things i've worked on",
     rotation: 1,
-    anchorX: "center",
+    from: "top",
+    to: "bottom",
+    bow: [30, 0],
+  },
+  {
+    key: "chat",
+    targetId: "nav-chat",
+    label: "ask me anything",
+    rotation: 3,
+    from: "left",
+    to: "bottom",
+    bow: [40, 0],
   },
   {
     key: "blog",
     targetId: "nav-blog",
     label: "thoughts and notes - ive always wanted a blog",
-    rotation: 3,
-    anchorX: "right",
+    rotation: -2,
+    from: "top",
+    to: "bottom",
+    bow: [-200, 30],
   },
   {
     key: "socials",
     targetId: "social-bar",
     label: "my socials!",
     rotation: -2,
-    anchorX: "center",
+    from: "bottom",
+    to: "top",
+    bow: [-30, 0],
   },
 ];
 
@@ -50,17 +66,10 @@ export default function Home() {
   const [arrows, setArrows] = useState([]);
 
   const measure = () => {
+    const PAD = 10; // gap between element edge and arrow endpoint
     const next = [];
-    for (const {
-      key,
-      targetId,
-      anchorX,
-      anchorXFraction,
-      anchorXOffset,
-      approachFrom,
-      flipArrow,
-      sourceAnchor,
-    } of ANNOTATIONS) {
+
+    for (const { key, targetId, from, to, bow } of ANNOTATIONS) {
       const labelEl = labelRefs.current[key];
       const targetEl = document.getElementById(targetId);
       if (!labelEl || !targetEl) continue;
@@ -68,57 +77,25 @@ export default function Home() {
       const lr = labelEl.getBoundingClientRect();
       const tr = targetEl.getBoundingClientRect();
 
-      // start from edge of label closest to target
-      const lx =
-        sourceAnchor === "right"
-          ? lr.right + 12
-          : sourceAnchor === "left"
-            ? lr.left - 12
-            : lr.left + lr.width / 2;
-      const ly =
-        sourceAnchor === "right" || sourceAnchor === "left"
-          ? lr.top + lr.height / 2
-          : tr.top > lr.top
-            ? lr.bottom
-            : lr.top;
+      // arrow start: edge of label
+      let lx, ly;
+      if (from === "right")       { lx = lr.right + PAD; ly = lr.top + lr.height / 2; }
+      else if (from === "left")   { lx = lr.left - PAD;  ly = lr.top + lr.height / 2; }
+      else if (from === "top")    { lx = lr.left + lr.width / 2; ly = lr.top - PAD; }
+      else /* bottom */           { lx = lr.left + lr.width / 2; ly = lr.bottom + PAD; }
 
-      // end near target but with padding
-      const tx =
-        anchorXOffset != null
-          ? tr.left + tr.width / 2 + anchorXOffset
-          : anchorXFraction != null
-            ? tr.left + tr.width * anchorXFraction
-            : anchorX === "right"
-              ? tr.right + 28
-              : tr.left + tr.width / 2;
-      const ty =
-        anchorX === "right" || anchorX === "left"
-          ? tr.top + tr.height / 2 + 2
-          : tr.top > lr.top
-            ? tr.top - 10
-            : tr.bottom + 10;
+      // arrow end: edge of target
+      let tx, ty;
+      if (to === "bottom")        { tx = tr.left + tr.width / 2; ty = tr.bottom + PAD; }
+      else if (to === "top")      { tx = tr.left + tr.width / 2; ty = tr.top - PAD; }
+      else if (to === "right")    { tx = tr.right + PAD; ty = tr.top + tr.height / 2; }
+      else /* left */             { tx = tr.left - PAD;  ty = tr.top + tr.height / 2; }
 
-      // control point: midpoint bowed perpendicular to the line
-      let cpx, cpy;
-      if (approachFrom === "southeast") {
-        const dist = Math.sqrt((tx - lx) ** 2 + (ty - ly) ** 2);
-        cpx = tx + dist * 0.25;
-        cpy = ty + dist * 0.25;
-      } else if (approachFrom === "below") {
-        cpx = tx;
-        cpy = ty + Math.abs(ly - ty) * 0.6;
-      } else {
-        const mx = (lx + tx) / 2;
-        const my = (ly + ty) / 2;
-        const dx = tx - lx;
-        const dy = ty - ly;
-        const len = Math.sqrt(dx * dx + dy * dy);
-        const bow = len * 0.3;
-        cpx = mx + (-dy / len) * bow;
-        cpy = my + (dx / len) * bow;
-      }
+      // control point: midpoint + explicit bow offset
+      const cpx = (lx + tx) / 2 + (bow?.[0] ?? 0);
+      const cpy = (ly + ty) / 2 + (bow?.[1] ?? 0);
 
-      next.push({ key, lx, ly, tx, ty, cpx, cpy, flipArrow });
+      next.push({ key, lx, ly, tx, ty, cpx, cpy });
     }
     setArrows(next);
   };
@@ -165,7 +142,7 @@ export default function Home() {
       </Motion.div>
 
       <svg className="home-arrows-svg">
-        {arrows.map(({ key, lx, ly, tx, ty, cpx, cpy, flipArrow }, i) => (
+        {arrows.map(({ key, lx, ly, tx, ty, cpx, cpy }, i) => (
           <Motion.g
             key={key}
             initial={{ opacity: 0 }}
@@ -180,11 +157,7 @@ export default function Home() {
               strokeLinecap="round"
             />
             <path
-              d={
-                flipArrow
-                  ? arrowhead(lx, ly, cpx, cpy)
-                  : arrowhead(tx, ty, cpx, cpy)
-              }
+              d={arrowhead(tx, ty, cpx, cpy)}
               fill="none"
               stroke="#b8ad9e"
               strokeWidth="1.5"

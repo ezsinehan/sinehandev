@@ -221,3 +221,9 @@
 .about-contact-list a:hover::after {
   width: 100%;
 }
+
+@media (max-width: 900px) {
+  .about-toc {
+    display: none;
+  }
+}

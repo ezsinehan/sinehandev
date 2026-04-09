@@ -234,3 +234,15 @@
   text-align: center;
   white-space: nowrap;
 }
+
+@media (max-width: 900px) {
+  .section-breadcrumb__title,
+  .debug-grid-toggle {
+    display: none;
+  }
+
+  .home-button {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

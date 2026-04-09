@@ -9,6 +9,7 @@ const SECTION_TITLES = {
   '/about': 'about',
   '/projects': 'projects',
   '/blog': 'blog',
+  '/chat': 'chat',
 }
 
 export default function Layout({ children }) {
@@ -69,6 +70,7 @@ export default function Layout({ children }) {
               <Link to="/about" className="nav-tab" id="nav-about">about</Link>
               <Link to="/projects" className="nav-tab" id="nav-projects">projects</Link>
               <Link to="/blog" className="nav-tab" id="nav-blog">blog</Link>
+              <Link to="/chat" className="nav-tab" id="nav-chat">chat</Link>
             </Motion.nav>
           ) : (
             <Motion.div
