@@ -120,6 +120,13 @@
   color: #4a4540;
 }
 
+.chat-info__note {
+  font-size: 0.75rem;
+  color: #c75c5c;
+  line-height: 1.5;
+  margin: 0;
+}
+
 .chat-wip {
   font-family: Kavivanar, cursive;
   font-size: 0.75rem;
