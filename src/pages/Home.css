@@ -9,16 +9,17 @@
   top: 50%;
   left: calc(50% - 8px);
   transform: translate(-50%, -50%);
+  max-width: 90vw;
+  text-align: center;
 }
 
 .home__title {
   font-family: Kavivanar, cursive;
-  font-size: 3.5rem;
+  font-size: clamp(1.8rem, 5vw, 3.5rem);
   font-weight: 400;
   color: #4a4540;
   letter-spacing: 0.03em;
   margin: 0;
-  white-space: nowrap;
 }
 
 .home-label {
@@ -50,14 +51,14 @@
   translate: calc(-50% - 8px) 0;
 }
 
-.home-label--blog {
+.home-label--chat {
   top: 38%;
   right: 8%;
 }
 
-.home-label--chat {
-  top: 50%;
-  right: 8%;
+.home-label--blog {
+  top: 56%;
+  right: 6%;
 }
 
 .home-label--socials {
@@ -74,5 +75,12 @@
   width: 100%;
   height: 100%;
   overflow: visible;
+}
+
+@media (max-width: 1500px), (max-height: 700px) {
+  .home-arrows-svg,
+  .home-label {
+    display: none;
+  }
 }
 
