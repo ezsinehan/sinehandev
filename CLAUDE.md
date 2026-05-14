@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Status
+
+Mid-revamp. Only the home page exists; everything else from v1 has been stripped. v1 site is archived as the `archive-2026-05-13` git tag / GitHub release at https://github.com/ezsinehan/sinehandev/releases/tag/archive-2026-05-13
+
 ## Commands
 
 ```bash
@@ -13,7 +17,7 @@ npm run lint      # ESLint check
 
 ## Environment
 
-Copy `.env.example` to `.env` and set `VITE_API_URL` to point at the RAG backend (default: `http://localhost:8000`). In production this is set as a Netlify environment variable.
+No environment variables required.
 
 ## Architecture
 
@@ -22,97 +26,53 @@ Single-page React app (React 19, React Router v7, Vite) deployed on Netlify.
 ### Layout (`src/components/Layout.jsx`)
 
 All pages are wrapped in a shared `Layout` that renders persistent UI:
-- **Debug grid toggle** (top-left) — pixel-art icon button at `top: 32px; left: 32px`; toggles a 32px red alignment overlay (`.debug-grid`); hidden on mobile (≤900px)
-- **Nav / breadcrumb** (top-center, fixed at `top: 4rem`, optically centered with `translateX(calc(-50% - 8px))`):
-  - On `/`: four tab links with IDs `nav-about`, `nav-projects`, `nav-blog`, `nav-chat` (used by Home annotations)
-  - On section pages: "sinehan's [title]" fades out on scroll (`scrollY > 50`); hidden on mobile (≤900px)
-  - On `/projects/:id`: breadcrumb shows "sinehan's projects"; back button shows "back" → `/projects`
-  - On all other non-home pages: "home" button appears at `left: 5rem, top: 4rem` → `/`; on mobile centers to top-middle
-  - `/blog/:slug` still maps breadcrumb label to `blog`
-  - Transitions use Framer Motion (`AnimatePresence mode="wait"`, fade + slide)
-- **Social icons box** (`id="social-bar"`, bottom-center, `z-index: 9999`): GitHub, email copy-to-clipboard, LinkedIn, resume PDF
-- **Email toast** — appears above the social box with Motion animation
+
+- **"Not enough space" overlay** (top of render tree) — fullscreen white overlay with "not enough space / try a bigger screen". Activated purely via CSS media query when viewport is `max-width: 399px` OR `max-height: 499px`. Z-index 100000 so it covers everything including the debug grid.
+- **Debug grid toggle** (top-left, `top: 32px; left: 32px`) — pixel-art icon button; toggles a 32px red alignment overlay (`.debug-grid`); hidden on mobile (≤900px). Color `#a0a0a0`, hover `#555`.
+- **Social icons box** (`id="social-bar"`, bottom-center, `z-index: 9999`): All blocky/pixel-art SVGs at 24×24 viewBox with 16×16 main body; `fill="currentColor"` for body, `fill="#fff"` for negative-space detail. Icon colors `#a0a0a0` / hover animated rainbow via `hue-rotate`. White box background, light-gray border (`#d0d0d0`).
+  - Default (`/`): GitHub, email copy-to-clipboard, LinkedIn, Substack, X, YouTube (6 icons — "work identity")
+  - `/fun`: above six **plus** Instagram, Threads, TikTok, Spotify (10 icons total). Conditional rendering driven by `useLocation().pathname === '/fun'`.
+  - **The Instagram/Threads/TikTok/Spotify links currently use `href="#"` placeholders — replace with real URLs.** (Substack, X, and YouTube already have real URLs.)
+- **Email toast** — appears above the social box with Motion animation when the email-copy button is clicked.
+
+No nav, no breadcrumb, no home button.
 
 ### Routes
 
 - `/` — `src/pages/Home.jsx` + `src/pages/Home.css`
-  - Typewriter hero text (responsive via `clamp()`, wraps on small screens) + arrow annotations
-  - Annotations use explicit `from`/`to`/`bow` arrow config per item (no auto-calculation)
-  - Arrows and labels hidden on viewports <1500px wide or <700px tall
-  - Extra red dev note in lower-left quadrant (`.home-dev-note`) asking users to report bugs/tips via LinkedIn/email
-- `/about` — `src/pages/About.jsx` + `src/pages/About.css`
-  - TOC sections: intro / currently / contact; TOC hidden on mobile (≤900px)
-  - Main body copy currently simplified to placeholder `blah blah blah` except title/contact content
-- `/projects` — `src/pages/Projects.jsx` + `src/pages/Projects.css`
-  - 2-column responsive grid (1-column on mobile ≤900px); no swipe mode
-  - Each tile shows project image + title; clicking navigates based on data:
-    - If `project.link` is set → opens that URL directly in a new tab (external redirect)
-    - If no `project.link` → navigates to `/projects/:id` detail page
-  - Project data imported from `src/data/projects.js`
-  - Tile overlay uses a plain CSS gradient (no `backdrop-filter` — removed for performance)
-- `/projects/:id` — `src/pages/ProjectDetail.jsx` (shares `About.css`)
-  - Mirrors About layout: fixed left TOC + centered scrollable content
-  - Sections are fully dynamic — defined per-project in `src/data/projects.js`
-  - Scrolls to top on mount; redirects to `/projects` if `id` not found
-- `/blog` — `src/pages/Blog.jsx` + `src/pages/Blog.css`
-  - Timeline/list of posts with date rail, summary, tags, and optional `featured` badge
-- `/blog/:slug` — `src/pages/BlogPost.jsx` + shared `src/pages/Blog.css`
-  - Renders markdown post body and previous/next navigation
-- `/chat` — `src/pages/Chat.jsx` + `src/pages/Chat.css`
-  - RAG chat interface with WIP banner
-  - Fetches `/info` (stack/stats/health) and `/prompts` on load with separate loading indicators
-  - If `/info` fails, chat is locked with offline message ("computer is off or tunnel is down")
-  - Sends questions to `POST /answer/stream` (SSE streaming) with fallback to `POST /answer` (JSON)
-  - Phased status messages during loading: embedding → searching → generating
-  - Streaming responses show tokens incrementally with blinking cursor
-  - Info panel (right side): stack details, stats, health, prompts with truncate/expand
-  - Mobile (≤900px): info panel hidden, chat goes fullscreen between nav and social bar
+  - Centered typewriter hero title at `top: 6rem`
+  - Greeting selection:
+    - **First visit on this browser** (no `sinehan-visited` key in `localStorage`): always types `"hi, i'm sinehan"`
+    - **Subsequent reloads**: types a random pick from a 7-entry variants array (`"good day! i'm known as sinehan"`, `"howdy, sinehan here"`, etc.)
+  - Typewriter chain: types greeting once, then stops with the cursor permanently blinking (text stays, no deletion)
+  - Cursor is absolutely positioned (`.Typewriter__cursor { position: absolute; left: 100%; }`) so the typed text alone is centered — the cursor floats off the right edge and does not push the text's visual center off-axis
+  - **"my socials!" annotation** (revived from v1) — a slightly-rotated Kavivanar label positioned high above-right of the socials box (`bottom: 11rem`), with a curved bezier arrow (color `#b8ad9e`) pointing down to the top of `#social-bar`. Arrow endpoints measured at runtime via `getBoundingClientRect()` on label + target, then drawn into a full-page absolutely-positioned SVG (`.home-arrows-svg`). Re-measured on window resize. Hidden via media query on small screens (`max-width: 900px` or `max-height: 600px`).
+  - **"under construction" banner** — centered on the page (`.construction` at `top: 50%`). White content block sandwiched between two yellow/black diagonal-stripe tape strips (`repeating-linear-gradient(-45deg, #f4c430, #1a1a1a)`). The text inside reuses the `.rainbow` gradient class from the title.
 
-### Project Data (`src/data/projects.js`)
+- `/fun` — same `Home` component, but `Layout` reads `useLocation()` and renders four additional "non-work" social icons (Instagram, Threads, TikTok, Spotify) when `pathname === '/fun'`. Default `/` keeps the icon bar to the 6 work-identity socials.
 
-Single source of truth for all projects. Each entry shape:
+### Debug grid (`.debug-grid` in `src/App.css`)
 
-```js
-{
-  id: 'slug',           // used in URL: /projects/slug
-  title: 'My Project',
-  image: '/image.png',  // public/ folder: use '/filename.png'; src/assets/: use import
-  link: 'https://...',  // optional — if set, tile links directly here (no detail page)
-  sections: [           // used by detail page; omit if link is set
-    { id: 'overview', label: 'overview', body: 'text...' },
-    { id: 'links', label: 'links', links: [{ label: 'github', href: '...' }] },
-    // add any number of sections in any order
-  ],
-}
-```
+Toggled by the top-left button. Used for verifying alignment during the revamp.
 
-Section types: `body` (renders a `<p>`) and/or `links` (renders a `<ul>` of `<a>` tags). Both can coexist in one section.
-
-### Blog content/data flow
-
-- Source files: `src/content/blog/*.md`
-- Loader/parsing: `src/lib/blog.js`
-  - Uses `import.meta.glob('../content/blog/*.md', { eager: true, import: 'default', query: '?raw' })`
-  - Parses simple YAML-like frontmatter (`title`, `date`, `summary`, `tags`, `featured`)
-  - Exposes:
-    - `getAllPosts()`
-    - `getPostBySlug(slug)`
-    - `getNeighborPosts(slug)`
-    - `getAllTags()`
-    - `formatPostDate(dateString)`
+- **Minor lines:** 1px red at `rgba(255,0,0,0.08)`, every 32px
+- **Major lines:** 1px red at `rgba(255,0,0,0.18)`, every 128px (every 4th minor line is reinforced)
+- **Center crosshair:** 3px red at `rgba(255,0,0,0.5)` — odd width centered on `50%` with `margin: -1px` so its middle pixel sits exactly on top of the center grid line
+- All four line layers anchored at `(50vw, 50vh)` so they pass through viewport center symmetrically
 
 ### Styling
 
-- `src/App.css` — shared nav/breadcrumb/socials/toast/debug-grid styles
-- `src/pages/Home.css` — home title, annotation labels/arrows, dev note, responsive breakpoints
-- `src/pages/About.css` — about layout + TOC + copy/contact styles; also used by `ProjectDetail`
-- `src/pages/Projects.css` — grid layout, tile styles, gradient overlay, responsive breakpoints
-- `src/pages/SectionPage.css` — renovation card and tape styling
-- `src/pages/Chat.css` — chat layout, info panel, streaming/phase indicators, mobile fullscreen
-- `src/pages/Blog.css` — blog list + detail styles
-- `src/index.css` — radial background + noise + vignette
+- `src/App.css` — debug grid, debug-grid-toggle, socials box, copy toast, "not enough space" overlay
+- `src/pages/Home.css` — title position + Typewriter cursor positioning fix
+- `src/index.css` — solid white body background + SVG noise overlay + subtle vignette
 - Font: Kavivanar throughout
 - Icons: pixel-art SVG inlined in JSX (no icon library)
+- Color palette (current revamp theme):
+  - Background: `#ffffff` (white) with noise + vignette
+  - Text primary: `#4a4540`
+  - Icon/UI subdued: `#a0a0a0`, hover/active `#555555`
+  - Border subdued: `#d0d0d0`
+  - Debug accent: `rgba(255, 0, 0, ...)`
 
 ### Browser Title Behavior
 
@@ -123,18 +83,16 @@ Section types: `body` (renders a `<p>`) and/or `links` (renders a `<ul>` of `<a>
 
 ### Dependencies
 
-- `motion` (Framer Motion)
-- `react-markdown`
-- `react-router-dom`
-- `typewriter-effect`
+- `motion` (Framer Motion) — email toast in Layout, title fade-in in Home
+- `react-router-dom` — only `/` is mounted, but kept in place for revamp routes
+- `typewriter-effect` — home title typing animation
 
-### Known Issues / Notes
+### Persistent client state
 
-- `npm run lint` has one pre-existing error: unused `placeholderImage` in `src/data/projects.js`.
-- Build succeeds, but Vite warns about chunk size > 500kb.
-- RAG backend is separate from this repo.
+- `localStorage` key `sinehan-visited` — set to `"1"` after the first render of `Home`. Used to gate the "first visit" greeting. Clear it (`localStorage.removeItem('sinehan-visited')` in devtools) to see the first-visit greeting again.
 
 ### Other
 
 - Routing: `src/main.jsx` (`BrowserRouter`), `src/App.jsx` (`Routes/Route`)
 - Netlify SPA fallback: `public/_redirects`
+- v1 archive: tag `archive-2026-05-13`, GitHub release linked above

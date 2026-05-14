@@ -6,9 +6,9 @@
 
 .home__title-wrapper {
   position: absolute;
-  top: 50%;
-  left: calc(50% - 8px);
-  transform: translate(-50%, -50%);
+  top: 6rem;
+  left: 50%;
+  transform: translateX(-50%);
   max-width: 90vw;
   text-align: center;
 }
@@ -22,6 +22,42 @@
   margin: 0;
 }
 
+.home__title .Typewriter {
+  position: relative;
+  display: inline-block;
+}
+
+.home__title .Typewriter__cursor {
+  position: absolute;
+  left: 100%;
+  top: 0;
+}
+
+.home__title .rainbow {
+  background: linear-gradient(
+    90deg,
+    #ff5050,
+    #ff9a3c,
+    #ffd84d,
+    #4dcf6a,
+    #4dc3ff,
+    #7a5cff,
+    #d65cff
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: rainbow-slide 6s linear infinite;
+}
+
+@keyframes rainbow-slide {
+  to {
+    background-position: -200% 0;
+  }
+}
+
 .home-label {
   position: absolute;
   font-family: Kavivanar, cursive;
@@ -32,55 +68,58 @@
   transform-origin: center center;
 }
 
-.home-label__emoji-link {
-  pointer-events: auto;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-
-/* spread labels around the page */
-.home-label--about {
-  top: 38%;
-  left: 8%;
-}
-
-.home-label--projects {
-  top: 30%;
-  left: 50%;
-  translate: calc(-50% - 8px) 0;
-}
-
-.home-label--chat {
-  top: 38%;
-  right: 8%;
-}
-
-.home-label--blog {
-  top: 56%;
-  right: 6%;
-}
-
 .home-label--socials {
-  top: 62%;
+  bottom: 11rem;
   left: 50%;
-  translate: calc(-50% - 8px) 0;
+  transform: translateX(calc(-50% + 90px)) rotate(-2deg);
 }
 
+.construction {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-width: min(420px, 80vw);
+  pointer-events: none;
+}
 
-/* full-screen SVG for arrows */
+.construction__tape {
+  height: 1.25rem;
+  background: repeating-linear-gradient(
+    -45deg,
+    #f4c430 0,
+    #f4c430 12px,
+    #1a1a1a 12px,
+    #1a1a1a 24px
+  );
+}
+
+.construction__text {
+  margin: 0;
+  padding: 1rem 1.5rem;
+  background: #ffffff;
+  text-align: center;
+  font-family: Kavivanar, cursive;
+  font-size: clamp(1.3rem, 3.2vw, 2rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
 .home-arrows-svg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   overflow: visible;
+  pointer-events: none;
 }
 
-@media (max-width: 1500px), (max-height: 700px) {
+@media (max-width: 900px), (max-height: 600px) {
   .home-arrows-svg,
   .home-label {
     display: none;
   }
 }
-

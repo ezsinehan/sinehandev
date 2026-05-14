@@ -3,23 +3,8 @@ import { Routes, Route } from 'react-router-dom'
 import './App.css'
 import Layout from './components/Layout'
 import Home from './pages/Home'
-import About from './pages/About'
-import Projects from './pages/Projects'
-import ProjectDetail from './pages/ProjectDetail'
-import Chat from './pages/Chat'
-import Blog from './pages/Blog'
-import BlogPost from './pages/BlogPost'
-import { PROJECTS } from './data/projects'
 
 function App() {
-  useEffect(() => {
-    PROJECTS.forEach(({ image }) => {
-      if (!image) return
-      const img = new Image()
-      img.src = image
-    })
-  }, [])
-
   useEffect(() => {
     const activeTitle = "sinehan's website"
     const awayTitle = 'was it me😔'
@@ -37,12 +22,7 @@ function App() {
     <Layout>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/chat" element={<Chat />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/projects/:id" element={<ProjectDetail />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route path="/fun" element={<Home />} />
       </Routes>
     </Layout>
   )
